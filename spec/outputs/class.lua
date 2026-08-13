@@ -815,7 +815,8 @@ do
   local _base_0 = {
     dang = do_something(function(self)
       return _class_0.__parent.__base.dang(self)
-    end)
+    end),
+    ---
   }
   _base_0.__index = _base_0
   setmetatable(_base_0, _parent_0.__base)
@@ -886,7 +887,8 @@ do
   local _base_0 = {
     get_class = function(self)
       return LocalHoist
-    end
+    end,
+    ---
   }
   _base_0.__index = _base_0
   setmetatable(_base_0, _parent_0.__base)

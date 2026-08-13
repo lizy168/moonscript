@@ -131,6 +131,45 @@ describe "correlate compile", ->
     assert.same false, ok
     assert.matches "correlate_test:6: boom", err
 
+  it "keeps annotation comments on their source lines", ->
+    code = unindent [[
+      ---@type number
+      x = 100
+
+      ---@param a number
+      f = (a) -> a
+    ]]
+
+    lua_code = compile code
+    lines = split lua_code, "\n"
+    assert.same "---@type number", lines[1]
+    assert.matches "x = 100", lines[2]
+    assert.same "---@param a number", lines[4]
+    assert.matches "f", lines[5]
+
+  it "separates ambiguous statement from annotation when padding", ->
+    code = unindent [[
+      x = y
+      ---@cast x number
+      (print)(x)
+    ]]
+
+    lua_code = compile code
+    assert.matches "%(print%)%(x%)", lua_code
+
+  it "breaks the line after a trailing annotation in a block", ->
+    code = unindent [[
+      if x
+        y = 1
+        ---trailing
+      z = 2
+    ]]
+
+    lua_code = compile code
+    for line in *split lua_code, "\n"
+      if line\match "%-%-%-trailing"
+        assert.same "---trailing", line\match "%-%-%-.*$"
+
   it "correlates against the right source when options are reused", ->
     options = correlate: true
 

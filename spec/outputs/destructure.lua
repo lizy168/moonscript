@@ -49,6 +49,7 @@ do
     a, b, c, d, e, f, g = _obj_0[1], _obj_0.b, _obj_0[2], _obj_0.d, _obj_0[3], _obj_0.f, _obj_0[4]
   end
 end
+--- 
 do
   local futurists = {
     sculptor = "Umberto Boccioni",

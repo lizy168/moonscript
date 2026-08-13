@@ -377,11 +377,23 @@ return {
       if items then
         local count = #items
         for i, tuple in ipairs(items) do
-          local line = format_line(tuple)
-          if not (count == i) then
-            line:append(table_delim)
+          local _continue_0 = false
+          repeat
+            if ntype(tuple) == "annotation" then
+              _with_0:add(tuple[2], tuple[-1])
+              _continue_0 = true
+              break
+            end
+            local line = format_line(tuple)
+            if not (count == i) then
+              line:append(table_delim)
+            end
+            _with_0:add(line)
+            _continue_0 = true
+          until true
+          if not _continue_0 then
+            break
           end
-          _with_0:add(line)
         end
       end
       return _with_0

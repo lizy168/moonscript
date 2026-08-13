@@ -98,33 +98,63 @@ super_scope = (value, t, key) ->
   -- can close over the names
   hoisted_locals = {}
 
+  -- annotation comments are buffered and moved into the same bucket as the
+  -- line they precede so they stay above it in the output
+  pending_annotations = {}
+  flush_annotations = (into) ->
+    return unless pending_annotations[1]
+    insert into, a for a in *pending_annotations
+    pending_annotations = {}
+
   for item in *body
     switch item[1]
+      when "annotation"
+        insert pending_annotations, item
       when "stm"
         stm = item[2]
         if ntype(stm) == "declare_with_shadows"
+          -- the declare is hoisted away from its source position
+          pending_annotations = {}
           insert hoisted_locals, stm
         else
+          flush_annotations statements
           insert statements, stm
       when "props"
         for tuple in *item[2,]
           if ntype(tuple[1]) == "self"
             {k,v} = tuple
             v = super_scope v, cls_super, {"key_literal", k[2]}
+            flush_annotations statements
             insert statements, build.assign_one k, v
           else
+            flush_annotations properties
             insert properties, tuple
 
+  flush_annotations properties
+
   -- find constructor
-  local constructor
-  properties = for tuple in *properties
-    key = tuple[1]
-    if key[1] == "key_literal" and key[2] == CONSTRUCTOR_NAME
-      constructor = tuple[2]
-      continue
-    else
-      {key, val} = tuple
-      {key, super_scope val, cls_instance_super, key}
+  local constructor, constructor_annotations
+  do
+    pending = {}
+    filtered = {}
+    for tuple in *properties
+      if ntype(tuple) == "annotation"
+        insert pending, tuple
+        continue
+
+      key = tuple[1]
+      if key[1] == "key_literal" and key[2] == CONSTRUCTOR_NAME
+        constructor = tuple[2]
+        constructor_annotations = pending if pending[1]
+      else
+        insert filtered, a for a in *pending
+        {key, val} = tuple
+        insert filtered, {key, super_scope val, cls_instance_super, key}
+
+      pending = {}
+
+    insert filtered, a for a in *pending
+    properties = filtered
 
 
   unless constructor
@@ -170,6 +200,12 @@ super_scope = (value, t, key) ->
     {"__name", real_name} -- "quote the string"
     parent_val and {"__parent", parent_cls_name} or nil
   }
+
+  -- inserted after build.table, which would mistake the "annotation" node
+  -- name for a string key
+  if constructor_annotations
+    for i, a in ipairs constructor_annotations
+      insert cls[2], i, a
 
   -- looking up a name in the class object
   class_index = if parent_val

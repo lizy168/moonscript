@@ -110,6 +110,7 @@ hello = 5 + (function()
     end
   end
 end)()
+---
 local z = false
 if false then
   local _scrap_0 = one
@@ -166,6 +167,7 @@ kzy = function()
     end
   end
 end
+---
 if not (true) then
   print("cool!")
 end
@@ -260,6 +262,7 @@ local c, b
 if something then
   a, c, b = "cool"
 end
+---
 local j
 if 1 then
   if 2 then

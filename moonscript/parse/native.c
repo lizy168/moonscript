@@ -55,7 +55,7 @@ typedef struct {
 // Single-slot memo for position-pure rules: pos is the memoized input
 // position + 1 (0 = empty slot), endpos the resulting position or
 // (size_t)-1 for failure
-#define PGEN_MEMO_COUNT 10
+#define PGEN_MEMO_COUNT 14
 typedef struct {
   size_t pos;
   size_t endpos;
@@ -461,115 +461,117 @@ static const char *__cg_names[] = {
 
 static int __cg_name_refs[1];
 // Interned constants (pushed once at module load)
-static int __const_refs[53];
+static int __const_refs[54];
 
 static void __const_init(lua_State *L) {
   lua_pushlstring(L, "", 0);
   __const_refs[0] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "assign", 6);
+  lua_pushlstring(L, "annotation", 10);
   __const_refs[1] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "bitnot", 6);
+  lua_pushlstring(L, "assign", 6);
   __const_refs[2] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "break", 5);
+  lua_pushlstring(L, "bitnot", 6);
   __const_refs[3] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "call", 4);
+  lua_pushlstring(L, "break", 5);
   __const_refs[4] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "case", 4);
+  lua_pushlstring(L, "call", 4);
   __const_refs[5] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "chain", 5);
+  lua_pushlstring(L, "case", 4);
   __const_refs[6] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "class", 5);
+  lua_pushlstring(L, "chain", 5);
   __const_refs[7] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "colon", 5);
+  lua_pushlstring(L, "class", 5);
   __const_refs[8] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "comprehension", 13);
+  lua_pushlstring(L, "colon", 5);
   __const_refs[9] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "continue", 8);
+  lua_pushlstring(L, "comprehension", 13);
   __const_refs[10] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "declare_glob", 12);
+  lua_pushlstring(L, "continue", 8);
   __const_refs[11] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "declare_with_shadows", 20);
+  lua_pushlstring(L, "declare_glob", 12);
   __const_refs[12] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "do", 2);
+  lua_pushlstring(L, "declare_with_shadows", 20);
   __const_refs[13] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "dot", 3);
+  lua_pushlstring(L, "do", 2);
   __const_refs[14] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "else", 4);
+  lua_pushlstring(L, "dot", 3);
   __const_refs[15] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "elseif", 6);
+  lua_pushlstring(L, "else", 4);
   __const_refs[16] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "explist", 7);
+  lua_pushlstring(L, "elseif", 6);
   __const_refs[17] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "export", 6);
+  lua_pushlstring(L, "explist", 7);
   __const_refs[18] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "fat", 3);
+  lua_pushlstring(L, "export", 6);
   __const_refs[19] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "fndef", 5);
+  lua_pushlstring(L, "fat", 3);
   __const_refs[20] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "for", 3);
+  lua_pushlstring(L, "fndef", 5);
   __const_refs[21] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "foreach", 7);
+  lua_pushlstring(L, "for", 3);
   __const_refs[22] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "if", 2);
+  lua_pushlstring(L, "foreach", 7);
   __const_refs[23] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "import", 6);
+  lua_pushlstring(L, "if", 2);
   __const_refs[24] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "index", 5);
+  lua_pushlstring(L, "import", 6);
   __const_refs[25] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "interpolate", 11);
+  lua_pushlstring(L, "index", 5);
   __const_refs[26] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "key_literal", 11);
+  lua_pushlstring(L, "interpolate", 11);
   __const_refs[27] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "length", 6);
+  lua_pushlstring(L, "key_literal", 11);
   __const_refs[28] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "minus", 5);
+  lua_pushlstring(L, "length", 6);
   __const_refs[29] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "not", 3);
+  lua_pushlstring(L, "minus", 5);
   __const_refs[30] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "number", 6);
+  lua_pushlstring(L, "not", 3);
   __const_refs[31] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "parens", 6);
+  lua_pushlstring(L, "number", 6);
   __const_refs[32] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "props", 5);
+  lua_pushlstring(L, "parens", 6);
   __const_refs[33] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "ref", 3);
+  lua_pushlstring(L, "props", 5);
   __const_refs[34] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "return", 6);
+  lua_pushlstring(L, "ref", 3);
   __const_refs[35] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "self", 4);
+  lua_pushlstring(L, "return", 6);
   __const_refs[36] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "self.__class", 12);
+  lua_pushlstring(L, "self", 4);
   __const_refs[37] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "self_class", 10);
+  lua_pushlstring(L, "self.__class", 12);
   __const_refs[38] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "slice", 5);
+  lua_pushlstring(L, "self_class", 10);
   __const_refs[39] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "slim", 4);
+  lua_pushlstring(L, "slice", 5);
   __const_refs[40] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "stm", 3);
+  lua_pushlstring(L, "slim", 4);
   __const_refs[41] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "string", 6);
+  lua_pushlstring(L, "stm", 3);
   __const_refs[42] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "switch", 6);
+  lua_pushlstring(L, "string", 6);
   __const_refs[43] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "table", 5);
+  lua_pushlstring(L, "switch", 6);
   __const_refs[44] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "tblcomprehension", 16);
+  lua_pushlstring(L, "table", 5);
   __const_refs[45] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "unless", 6);
+  lua_pushlstring(L, "tblcomprehension", 16);
   __const_refs[46] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "unpack", 6);
+  lua_pushlstring(L, "unless", 6);
   __const_refs[47] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "update", 6);
+  lua_pushlstring(L, "unpack", 6);
   __const_refs[48] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "when", 4);
+  lua_pushlstring(L, "update", 6);
   __const_refs[49] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "while", 5);
+  lua_pushlstring(L, "when", 4);
   __const_refs[50] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushlstring(L, "with", 4);
+  lua_pushlstring(L, "while", 5);
   __const_refs[51] = luaL_ref(L, LUA_REGISTRYINDEX);
-  lua_pushinteger(L, 1);
+  lua_pushlstring(L, "with", 4);
   __const_refs[52] = luaL_ref(L, LUA_REGISTRYINDEX);
+  lua_pushinteger(L, 1);
+  __const_refs[53] = luaL_ref(L, LUA_REGISTRYINDEX);
   for (int i = 0; __cg_names[i] != NULL; i++) {
     lua_pushstring(L, __cg_names[i]);
     __cg_name_refs[i] = luaL_ref(L, LUA_REGISTRYINDEX);
@@ -807,9 +809,9 @@ static const char __cmt_code_0[] = "    local tree = require(\"moonscript.parse.
 static const char __cmt_code_1[] = "return function(stm, dec)\n      if dec then\n        return {\"decorated\", stm, dec}\n      end\n      return stm\n    end";
 static const char __cmt_code_2[] = "return function(p, value)\n    if type(value) == \"table\" then\n      value[-1] = p\n    end\n    return value\n  end";
 static const char __cmt_code_3[] = "  local tree = require(\"moonscript.parse.tree\")\n  return function(lhs, assign)\n    return tree.format_assign(lhs, assign)\n  end";
-static const char __cmt_code_4[] = "return function(name, p)\n      return {\n        {\"key_literal\", name},\n        {\"ref\", name, [-1] = p},\n      }\n    end";
-static const char __cmt_code_5[] = "    local tree = require(\"moonscript.parse.tree\")\n    return function(callee, args)\n      return tree.join_chain(callee, args)\n    end";
-static const char __cmt_code_6[] = "return function(...)\n    if select(\"#\", ...) == 1 then\n      return ...\n    end\n    return {\"exp\", ...}\n  end";
+static const char __cmt_code_4[] = "return function(...)\n    if select(\"#\", ...) == 1 then\n      return ...\n    end\n    return {\"exp\", ...}\n  end";
+static const char __cmt_code_5[] = "return function(name, p)\n      return {\n        {\"key_literal\", name},\n        {\"ref\", name, [-1] = p},\n      }\n    end";
+static const char __cmt_code_6[] = "    local tree = require(\"moonscript.parse.tree\")\n    return function(callee, args)\n      return tree.join_chain(callee, args)\n    end";
 static const char __cmt_code_7[] = "return function(eq_start, eq_end, content)\n      return {\"string\", \"[\" .. (\"=\"):rep(eq_end - eq_start) .. \"[\", content}\n    end";
 static const char __cmt_code_8[] = "    local subject, pos, node = ...\n    local last = node[#node]\n    local t = type(last) == \"table\" and last[1]\n    if t == \"dot\" or t == \"index\" or t == \"slice\" then\n      return pos, node\n    end\n    return false\n  ";
 
@@ -906,6 +908,10 @@ static void __cmt_init(lua_State *L) {
 // Forward declarations
 static bool parse_Root(Parser *parser);
 static bool parse_Advance(Parser *parser);
+static bool parse_AnnotationComment(Parser *parser);
+static bool parse_AnnotationDiscard(Parser *parser);
+static bool parse_AnnotationIndent(Parser *parser);
+static bool parse_AnnotationPrefix(Parser *parser);
 static bool parse_ArgBlock(Parser *parser);
 static bool parse_ArgLine(Parser *parser);
 static bool parse_Assign(Parser *parser);
@@ -914,9 +920,11 @@ static bool parse_AssignableNameList(Parser *parser);
 static bool parse_BinaryOperator(Parser *parser);
 static bool parse_Block(Parser *parser);
 static bool parse_Body(Parser *parser);
+static bool parse_BodyBlock(Parser *parser);
 static bool parse_Break(Parser *parser);
 static bool parse_BreakLoop(Parser *parser);
 static bool parse_Callable(Parser *parser);
+static bool parse_CaseSep(Parser *parser);
 static bool parse_Chain(Parser *parser);
 static bool parse_ChainItem(Parser *parser);
 static bool parse_ChainItems(Parser *parser);
@@ -924,6 +932,7 @@ static bool parse_ChainValue(Parser *parser);
 static bool parse_CharOperators(Parser *parser);
 static bool parse_CheckIndent(Parser *parser);
 static bool parse_ClassBlock(Parser *parser);
+static bool parse_ClassBlockRest(Parser *parser);
 static bool parse_ClassDecl(Parser *parser);
 static bool parse_ClassLine(Parser *parser);
 static bool parse_ColonChain(Parser *parser);
@@ -940,6 +949,7 @@ static bool parse_DoubleString(Parser *parser);
 static bool parse_DoubleStringInner(Parser *parser);
 static bool parse_DoubleStringInterp(Parser *parser);
 static bool parse_EmptyLine(Parser *parser);
+static bool parse_EmptyLineNA(Parser *parser);
 static bool parse_Exp(Parser *parser);
 static bool parse_ExpList(Parser *parser);
 static bool parse_ExpListLow(Parser *parser);
@@ -999,6 +1009,8 @@ static bool parse_SwitchCase(Parser *parser);
 static bool parse_SwitchElse(Parser *parser);
 static bool parse_TableBlock(Parser *parser);
 static bool parse_TableBlockInner(Parser *parser);
+static bool parse_TableBlockLine(Parser *parser);
+static bool parse_TableBlockRest(Parser *parser);
 static bool parse_TableLit(Parser *parser);
 static bool parse_TableLitLine(Parser *parser);
 static bool parse_TableValue(Parser *parser);
@@ -1131,6 +1143,592 @@ static bool parse_Advance(Parser *parser) {
     fprintf(stderr, "%*sRule %s failed at position %zu\n", (int)parser->depth, "", "Advance", parser->pos);
   }
 #endif
+
+  parser->depth -= 1;
+  return parser->success;
+}
+
+static bool parse_AnnotationComment(Parser *parser) {
+  size_t start = parser->pos;
+
+  parser->depth += 1;
+  if (parser->depth > PGEN_MAX_DEPTH) {
+    // A Lua error (rather than a match failure) so the overflow can't be
+    // silently converted into a successful parse by a predicate or choice
+    luaL_error(parser->L, "pgen: max recursion depth (%d) exceeded at position %d", (int)PGEN_MAX_DEPTH, (int)(parser->pos + 1));
+  }
+
+#ifdef PGEN_DEBUG
+  fprintf(stderr, "%*sEntering rule %s at position %zu\n", (int)parser->depth, "", "AnnotationComment", start);
+#endif
+
+  { // Sequence with 3 patterns
+    REMEMBER_POSITION(parser, pos);
+
+    { // Zero or more repetitions
+      while (true) {
+        { // Match character set " \t"
+          if (parser->pos < parser->input_len) {
+            switch (parser->input[parser->pos]) {
+            case 32: /* " " */
+            case 9:  /* "\t" */
+              parser->pos++;
+              break;
+            default:
+#ifdef PGEN_ERRORS
+              sprintf(parser->error_message, "Expected one of "
+                                             "\" \\t\""
+                                             " at position %zu",
+                      parser->pos);
+#endif
+              parser->success = false;
+            }
+          } else {
+#ifdef PGEN_ERRORS
+            sprintf(parser->error_message, "Expected one of "
+                                           "\" \\t\""
+                                           " at position %zu but reached end of input",
+                    parser->pos);
+#endif
+            parser->success = false;
+          }
+        }
+        if (!parser->success) {
+          break;
+        }
+      }
+      // Only recover from ordinary failure, not labeled failure from T()
+      if (!parser->throw_label) {
+        parser->success = true;
+      }
+    }
+    if (parser->success) {
+      { // Transform Capture (Cfn id=2)
+        size_t fn_cap_start = parser->cap_len;
+        pgen_cap_push(parser, PGEN_CAP_FN_OPEN, __cmt_refs[2], parser->pos, 0);
+        { // Sequence with 2 patterns
+          REMEMBER_POSITION(parser, pos);
+
+          { // Position Capture
+            pgen_cap_push(parser, PGEN_CAP_POS, 0, parser->pos, 0);
+          }
+          if (parser->success) {
+            { // Capture Table
+              size_t ct_cap_start = parser->cap_len;
+              pgen_cap_push(parser, PGEN_CAP_TBL_OPEN, 0, 0, 0);
+              { // Sequence with 2 patterns
+                REMEMBER_POSITION(parser, pos);
+
+                { // Constant Capture
+                  // A constant capture matches the empty string and produces all given values
+                  pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[1], 0, 0); // "annotation"
+                }
+                if (parser->success) {
+                  { // Capture
+                    size_t start_pos = parser->pos;
+                    { // Sequence with 2 patterns
+                      REMEMBER_INPUT_POSITION(parser, pos);
+
+                      parse_AnnotationPrefix(parser);
+                      if (parser->success) {
+                        { // Zero or more repetitions
+                          while (true) {
+                            { // Sequence with 2 patterns
+                              REMEMBER_INPUT_POSITION(parser, pos);
+
+                              { // Negate (only match if pattern fails)
+                                REMEMBER_INPUT_POSITION(parser, pos);
+
+                                { // Match character set "\r\n"
+                                  if (parser->pos < parser->input_len) {
+                                    switch (parser->input[parser->pos]) {
+                                    case 13: /* "\r" */
+                                    case 10: /* "\n" */
+                                      parser->pos++;
+                                      break;
+                                    default:
+#ifdef PGEN_ERRORS
+                                      sprintf(parser->error_message, "Expected one of "
+                                                                     "\"\\r\\n\""
+                                                                     " at position %zu",
+                                              parser->pos);
+#endif
+                                      parser->success = false;
+                                    }
+                                  } else {
+#ifdef PGEN_ERRORS
+                                    sprintf(parser->error_message, "Expected one of "
+                                                                   "\"\\r\\n\""
+                                                                   " at position %zu but reached end of input",
+                                            parser->pos);
+#endif
+                                    parser->success = false;
+                                  }
+                                }
+
+                                if (parser->success) {
+                                  // Pattern matched, so negate fails
+                                  RESTORE_INPUT_POSITION(parser, pos);
+                                  parser->success = false;
+                                  PGEN_RECORD_FURTHEST(parser);
+#ifdef PGEN_ERRORS
+                                  sprintf(parser->error_message, "Negated pattern unexpectedly matched at position %zu", pos.pos);
+#endif
+                                } else {
+                                  // Pattern failed, so negate succeeds
+                                  parser->success = true;
+                                  // Swallow labeled failures inside predicates (LPegLabel behavior)
+                                  if (parser->throw_label) {
+                                    parser->throw_label = NULL;
+                                    parser->throw_pos = 0;
+                                  }
+                                  RESTORE_INPUT_POSITION(parser, pos); // Restore original position (technically not necessary since failed pattern should make no changes to position)
+                                }
+                              }
+                              if (parser->success) {
+                                { // Match any 1 characters
+                                  if (parser->pos + 1 <= parser->input_len) {
+                                    parser->pos += 1;
+                                  } else {
+#ifdef PGEN_ERRORS
+                                    sprintf(parser->error_message, "Expected at least 1 more characters at position %zu", parser->pos);
+#endif
+                                    parser->success = false;
+                                    PGEN_RECORD_FURTHEST(parser);
+                                  }
+                                }
+                                if (!parser->success) {
+                                  RESTORE_INPUT_POSITION(parser, pos);
+                                }
+                              }
+                            }
+                            if (!parser->success) {
+                              break;
+                            }
+                          }
+                          // Only recover from ordinary failure, not labeled failure from T()
+                          if (!parser->throw_label) {
+                            parser->success = true;
+                          }
+                        }
+                        if (!parser->success) {
+                          RESTORE_INPUT_POSITION(parser, pos);
+                        }
+                      }
+                    }
+
+                    if (parser->success) {
+                      pgen_cap_push(parser, PGEN_CAP_STR, 0, start_pos, parser->pos - start_pos);
+                    }
+                  }
+                  if (!parser->success) {
+                    RESTORE_POSITION(parser, pos);
+                  }
+                }
+              }
+
+              if (parser->success) {
+                pgen_cap_push(parser, PGEN_CAP_TBL_CLOSE, 0, 0, 0);
+              } else {
+                parser->cap_len = ct_cap_start;
+              }
+            }
+            if (!parser->success) {
+              RESTORE_POSITION(parser, pos);
+            }
+          }
+        }
+
+        if (parser->success) {
+          pgen_cap_push(parser, PGEN_CAP_FN_CLOSE, 0, parser->pos, 0);
+        } else {
+          parser->cap_len = fn_cap_start;
+        }
+      }
+      if (parser->success) {
+        { // Lookahead (match without consuming input)
+          REMEMBER_INPUT_POSITION(parser, pos);
+
+          parse_Stop(parser);
+
+          if (parser->success) {
+            // Pattern matched, but we don't consume any input
+            RESTORE_INPUT_POSITION(parser, pos);
+          }
+        }
+      }
+      if (!parser->success) {
+        RESTORE_POSITION(parser, pos);
+      }
+    }
+  }
+
+#ifdef PGEN_DEBUG
+  if (parser->success) {
+    fprintf(stderr, "%*sRule %s matched range: %zu-%zu\n", (int)parser->depth, "", "AnnotationComment", start, parser->pos);
+    fprintf(stderr, "%*s\t%.*s\n", (int)parser->depth, "", (int)(parser->pos - start), parser->input + start);
+  } else {
+    fprintf(stderr, "%*sRule %s failed at position %zu\n", (int)parser->depth, "", "AnnotationComment", parser->pos);
+  }
+#endif
+
+  parser->depth -= 1;
+  return parser->success;
+}
+
+static bool parse_AnnotationDiscard(Parser *parser) {
+  size_t start = parser->pos;
+  // Position-pure rule (no captures, labels, or other state): a
+  // single-slot memo short-circuits the repeated calls that backtracking
+  // alternatives make at the same position
+  if (parser->memo[0].pos == start + 1) {
+    if (parser->memo[0].endpos == (size_t)-1) {
+      parser->success = false;
+      return false;
+    }
+    parser->pos = parser->memo[0].endpos;
+    parser->success = true;
+    return true;
+  }
+
+  parser->depth += 1;
+  if (parser->depth > PGEN_MAX_DEPTH) {
+    // A Lua error (rather than a match failure) so the overflow can't be
+    // silently converted into a successful parse by a predicate or choice
+    luaL_error(parser->L, "pgen: max recursion depth (%d) exceeded at position %d", (int)PGEN_MAX_DEPTH, (int)(parser->pos + 1));
+  }
+
+#ifdef PGEN_DEBUG
+  fprintf(stderr, "%*sEntering rule %s at position %zu\n", (int)parser->depth, "", "AnnotationDiscard", start);
+#endif
+
+  { // Sequence with 4 patterns
+    REMEMBER_INPUT_POSITION(parser, pos);
+
+    { // Zero or more repetitions
+      while (true) {
+        { // Match character set " \t"
+          if (parser->pos < parser->input_len) {
+            switch (parser->input[parser->pos]) {
+            case 32: /* " " */
+            case 9:  /* "\t" */
+              parser->pos++;
+              break;
+            default:
+#ifdef PGEN_ERRORS
+              sprintf(parser->error_message, "Expected one of "
+                                             "\" \\t\""
+                                             " at position %zu",
+                      parser->pos);
+#endif
+              parser->success = false;
+            }
+          } else {
+#ifdef PGEN_ERRORS
+            sprintf(parser->error_message, "Expected one of "
+                                           "\" \\t\""
+                                           " at position %zu but reached end of input",
+                    parser->pos);
+#endif
+            parser->success = false;
+          }
+        }
+        if (!parser->success) {
+          break;
+        }
+      }
+      // Only recover from ordinary failure, not labeled failure from T()
+      if (!parser->throw_label) {
+        parser->success = true;
+      }
+    }
+    if (parser->success) {
+      parse_AnnotationPrefix(parser);
+      if (parser->success) {
+        { // Zero or more repetitions
+          while (true) {
+            { // Sequence with 2 patterns
+              REMEMBER_INPUT_POSITION(parser, pos);
+
+              { // Negate (only match if pattern fails)
+                REMEMBER_INPUT_POSITION(parser, pos);
+
+                { // Match character set "\r\n"
+                  if (parser->pos < parser->input_len) {
+                    switch (parser->input[parser->pos]) {
+                    case 13: /* "\r" */
+                    case 10: /* "\n" */
+                      parser->pos++;
+                      break;
+                    default:
+#ifdef PGEN_ERRORS
+                      sprintf(parser->error_message, "Expected one of "
+                                                     "\"\\r\\n\""
+                                                     " at position %zu",
+                              parser->pos);
+#endif
+                      parser->success = false;
+                    }
+                  } else {
+#ifdef PGEN_ERRORS
+                    sprintf(parser->error_message, "Expected one of "
+                                                   "\"\\r\\n\""
+                                                   " at position %zu but reached end of input",
+                            parser->pos);
+#endif
+                    parser->success = false;
+                  }
+                }
+
+                if (parser->success) {
+                  // Pattern matched, so negate fails
+                  RESTORE_INPUT_POSITION(parser, pos);
+                  parser->success = false;
+                  PGEN_RECORD_FURTHEST(parser);
+#ifdef PGEN_ERRORS
+                  sprintf(parser->error_message, "Negated pattern unexpectedly matched at position %zu", pos.pos);
+#endif
+                } else {
+                  // Pattern failed, so negate succeeds
+                  parser->success = true;
+                  // Swallow labeled failures inside predicates (LPegLabel behavior)
+                  if (parser->throw_label) {
+                    parser->throw_label = NULL;
+                    parser->throw_pos = 0;
+                  }
+                  RESTORE_INPUT_POSITION(parser, pos); // Restore original position (technically not necessary since failed pattern should make no changes to position)
+                }
+              }
+              if (parser->success) {
+                { // Match any 1 characters
+                  if (parser->pos + 1 <= parser->input_len) {
+                    parser->pos += 1;
+                  } else {
+#ifdef PGEN_ERRORS
+                    sprintf(parser->error_message, "Expected at least 1 more characters at position %zu", parser->pos);
+#endif
+                    parser->success = false;
+                    PGEN_RECORD_FURTHEST(parser);
+                  }
+                }
+                if (!parser->success) {
+                  RESTORE_INPUT_POSITION(parser, pos);
+                }
+              }
+            }
+            if (!parser->success) {
+              break;
+            }
+          }
+          // Only recover from ordinary failure, not labeled failure from T()
+          if (!parser->throw_label) {
+            parser->success = true;
+          }
+        }
+        if (parser->success) {
+          parse_Break(parser);
+        }
+      }
+      if (!parser->success) {
+        RESTORE_INPUT_POSITION(parser, pos);
+      }
+    }
+  }
+
+#ifdef PGEN_DEBUG
+  if (parser->success) {
+    fprintf(stderr, "%*sRule %s matched range: %zu-%zu\n", (int)parser->depth, "", "AnnotationDiscard", start, parser->pos);
+    fprintf(stderr, "%*s\t%.*s\n", (int)parser->depth, "", (int)(parser->pos - start), parser->input + start);
+  } else {
+    fprintf(stderr, "%*sRule %s failed at position %zu\n", (int)parser->depth, "", "AnnotationDiscard", parser->pos);
+  }
+#endif
+  parser->memo[0].pos = start + 1;
+  parser->memo[0].endpos = parser->success ? parser->pos : (size_t)-1;
+
+  parser->depth -= 1;
+  return parser->success;
+}
+
+static bool parse_AnnotationIndent(Parser *parser) {
+  size_t start = parser->pos;
+
+  parser->depth += 1;
+  if (parser->depth > PGEN_MAX_DEPTH) {
+    // A Lua error (rather than a match failure) so the overflow can't be
+    // silently converted into a successful parse by a predicate or choice
+    luaL_error(parser->L, "pgen: max recursion depth (%d) exceeded at position %d", (int)PGEN_MAX_DEPTH, (int)(parser->pos + 1));
+  }
+
+#ifdef PGEN_DEBUG
+  fprintf(stderr, "%*sEntering rule %s at position %zu\n", (int)parser->depth, "", "AnnotationIndent", start);
+#endif
+
+  {   // Choice
+    { // Indenter check (stack 0): consume whitespace, width must equal top
+      size_t ind_end;
+      int ind_width = pgen_ind_measure(parser, &ind_end, 4);
+      PgenIndStack *ind_s = &parser->ind_stacks[0];
+      if (ind_s->size > 0 && ind_s->items[ind_s->size - 1] == ind_width) {
+        parser->pos = ind_end;
+      } else {
+        parser->success = false;
+        PGEN_RECORD_FURTHEST(parser);
+#ifdef PGEN_ERRORS
+        sprintf(parser->error_message, "Indent width %d does not match current level at position %zu", ind_width, parser->pos);
+#endif
+      }
+    }
+
+    if (!parser->success && !parser->throw_label) {
+      parser->success = true;
+      { // Sequence with 2 patterns
+        REMEMBER_POSITION(parser, pos);
+
+        { // Indenter advance (stack 0): push width if deeper than top, consume nothing
+          size_t ind_end;
+          int ind_width = pgen_ind_measure(parser, &ind_end, 4);
+          (void)ind_end;
+          PgenIndStack *ind_s = &parser->ind_stacks[0];
+          if (ind_s->size > 0 && ind_width > ind_s->items[ind_s->size - 1]) {
+            pgen_ind_push(parser, 0, ind_width);
+          } else {
+            parser->success = false;
+            PGEN_RECORD_FURTHEST(parser);
+#ifdef PGEN_ERRORS
+            sprintf(parser->error_message, "Indent width %d does not advance current level at position %zu", ind_width, parser->pos);
+#endif
+          }
+        }
+        if (parser->success) {
+          { // Indenter pop (stack 0)
+            if (!pgen_ind_pop(parser, 0)) {
+              parser->success = false;
+              PGEN_RECORD_FURTHEST(parser);
+#ifdef PGEN_ERRORS
+              sprintf(parser->error_message, "Indenter stack 0 is empty at position %zu", parser->pos);
+#endif
+            }
+          }
+          if (!parser->success) {
+            RESTORE_POSITION(parser, pos);
+          }
+        }
+      }
+    }
+  }
+
+#ifdef PGEN_DEBUG
+  if (parser->success) {
+    fprintf(stderr, "%*sRule %s matched range: %zu-%zu\n", (int)parser->depth, "", "AnnotationIndent", start, parser->pos);
+    fprintf(stderr, "%*s\t%.*s\n", (int)parser->depth, "", (int)(parser->pos - start), parser->input + start);
+  } else {
+    fprintf(stderr, "%*sRule %s failed at position %zu\n", (int)parser->depth, "", "AnnotationIndent", parser->pos);
+  }
+#endif
+
+  parser->depth -= 1;
+  return parser->success;
+}
+
+static bool parse_AnnotationPrefix(Parser *parser) {
+  size_t start = parser->pos;
+  // Position-pure rule (no captures, labels, or other state): a
+  // single-slot memo short-circuits the repeated calls that backtracking
+  // alternatives make at the same position
+  if (parser->memo[1].pos == start + 1) {
+    if (parser->memo[1].endpos == (size_t)-1) {
+      parser->success = false;
+      return false;
+    }
+    parser->pos = parser->memo[1].endpos;
+    parser->success = true;
+    return true;
+  }
+
+  parser->depth += 1;
+  if (parser->depth > PGEN_MAX_DEPTH) {
+    // A Lua error (rather than a match failure) so the overflow can't be
+    // silently converted into a successful parse by a predicate or choice
+    luaL_error(parser->L, "pgen: max recursion depth (%d) exceeded at position %d", (int)PGEN_MAX_DEPTH, (int)(parser->pos + 1));
+  }
+
+#ifdef PGEN_DEBUG
+  fprintf(stderr, "%*sEntering rule %s at position %zu\n", (int)parser->depth, "", "AnnotationPrefix", start);
+#endif
+
+  { // Sequence with 2 patterns
+    REMEMBER_INPUT_POSITION(parser, pos);
+
+    { // Match literal "---"
+      if (parser->pos + 3 <= parser->input_len &&
+          memcmp(parser->input + parser->pos, "---", 3) == 0) {
+        parser->pos += 3;
+      } else {
+#ifdef PGEN_ERRORS
+        sprintf(parser->error_message, "Expected `"
+                                       "---"
+                                       "` at position %zu",
+                parser->pos);
+#endif
+        parser->success = false;
+        PGEN_RECORD_FURTHEST(parser);
+      }
+    }
+    if (parser->success) {
+      { // Negate (only match if pattern fails)
+        REMEMBER_INPUT_POSITION(parser, pos);
+
+        { // Match single character "-"
+          if (parser->pos < parser->input_len &&
+              parser->input[parser->pos] == 45) {
+            parser->pos++;
+          } else {
+#ifdef PGEN_ERRORS
+            sprintf(parser->error_message, "Expected character `"
+                                           "-"
+                                           "` at position %zu",
+                    parser->pos);
+#endif
+            parser->success = false;
+          }
+        }
+
+        if (parser->success) {
+          // Pattern matched, so negate fails
+          RESTORE_INPUT_POSITION(parser, pos);
+          parser->success = false;
+          PGEN_RECORD_FURTHEST(parser);
+#ifdef PGEN_ERRORS
+          sprintf(parser->error_message, "Negated pattern unexpectedly matched at position %zu", pos.pos);
+#endif
+        } else {
+          // Pattern failed, so negate succeeds
+          parser->success = true;
+          // Swallow labeled failures inside predicates (LPegLabel behavior)
+          if (parser->throw_label) {
+            parser->throw_label = NULL;
+            parser->throw_pos = 0;
+          }
+          RESTORE_INPUT_POSITION(parser, pos); // Restore original position (technically not necessary since failed pattern should make no changes to position)
+        }
+      }
+      if (!parser->success) {
+        RESTORE_INPUT_POSITION(parser, pos);
+      }
+    }
+  }
+
+#ifdef PGEN_DEBUG
+  if (parser->success) {
+    fprintf(stderr, "%*sRule %s matched range: %zu-%zu\n", (int)parser->depth, "", "AnnotationPrefix", start, parser->pos);
+    fprintf(stderr, "%*s\t%.*s\n", (int)parser->depth, "", (int)(parser->pos - start), parser->input + start);
+  } else {
+    fprintf(stderr, "%*sRule %s failed at position %zu\n", (int)parser->depth, "", "AnnotationPrefix", parser->pos);
+  }
+#endif
+  parser->memo[1].pos = start + 1;
+  parser->memo[1].endpos = parser->success ? parser->pos : (size_t)-1;
 
   parser->depth -= 1;
   return parser->success;
@@ -1279,7 +1877,7 @@ static bool parse_Assign(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[1], 0, 0); // "assign"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[2], 0, 0); // "assign"
       }
       if (parser->success) {
         parse_Space(parser);
@@ -1683,28 +2281,14 @@ static bool parse_Body(Parser *parser) {
 #endif
 
   {   // Choice
-    { // Sequence with 4 patterns
+    { // Sequence with 3 patterns
       REMEMBER_POSITION(parser, pos);
 
       parse_Space(parser);
       if (parser->success) {
         parse_Break(parser);
         if (parser->success) {
-          { // Zero or more repetitions
-            while (true) {
-              parse_EmptyLine(parser);
-              if (!parser->success) {
-                break;
-              }
-            }
-            // Only recover from ordinary failure, not labeled failure from T()
-            if (!parser->throw_label) {
-              parser->success = true;
-            }
-          }
-          if (parser->success) {
-            parse_InBlock(parser);
-          }
+          parse_BodyBlock(parser);
         }
         if (!parser->success) {
           RESTORE_POSITION(parser, pos);
@@ -1741,17 +2325,84 @@ static bool parse_Body(Parser *parser) {
   return parser->success;
 }
 
+static bool parse_BodyBlock(Parser *parser) {
+  size_t start = parser->pos;
+
+  parser->depth += 1;
+  if (parser->depth > PGEN_MAX_DEPTH) {
+    // A Lua error (rather than a match failure) so the overflow can't be
+    // silently converted into a successful parse by a predicate or choice
+    luaL_error(parser->L, "pgen: max recursion depth (%d) exceeded at position %d", (int)PGEN_MAX_DEPTH, (int)(parser->pos + 1));
+  }
+
+#ifdef PGEN_DEBUG
+  fprintf(stderr, "%*sEntering rule %s at position %zu\n", (int)parser->depth, "", "BodyBlock", start);
+#endif
+
+  { // Sequence with 2 patterns
+    REMEMBER_POSITION(parser, pos);
+
+    { // Zero or more repetitions
+      while (true) {
+        parse_EmptyLineNA(parser);
+        if (!parser->success) {
+          break;
+        }
+      }
+      // Only recover from ordinary failure, not labeled failure from T()
+      if (!parser->throw_label) {
+        parser->success = true;
+      }
+    }
+    if (parser->success) {
+      { // Choice
+        parse_InBlock(parser);
+
+        if (!parser->success && !parser->throw_label) {
+          parser->success = true;
+          { // Sequence with 2 patterns
+            REMEMBER_POSITION(parser, pos);
+
+            parse_AnnotationDiscard(parser);
+            if (parser->success) {
+              parse_BodyBlock(parser);
+              if (!parser->success) {
+                RESTORE_POSITION(parser, pos);
+              }
+            }
+          }
+        }
+      }
+      if (!parser->success) {
+        RESTORE_POSITION(parser, pos);
+      }
+    }
+  }
+
+#ifdef PGEN_DEBUG
+  if (parser->success) {
+    fprintf(stderr, "%*sRule %s matched range: %zu-%zu\n", (int)parser->depth, "", "BodyBlock", start, parser->pos);
+    fprintf(stderr, "%*s\t%.*s\n", (int)parser->depth, "", (int)(parser->pos - start), parser->input + start);
+  } else {
+    fprintf(stderr, "%*sRule %s failed at position %zu\n", (int)parser->depth, "", "BodyBlock", parser->pos);
+  }
+#endif
+
+  parser->depth -= 1;
+  return parser->success;
+}
+
 static bool parse_Break(Parser *parser) {
   size_t start = parser->pos;
   // Position-pure rule (no captures, labels, or other state): a
   // single-slot memo short-circuits the repeated calls that backtracking
   // alternatives make at the same position
-  if (parser->memo[0].pos == start + 1) {
-    if (parser->memo[0].endpos == (size_t)-1) {
+  if (parser->memo[2].pos == start + 1) {
+    if (parser->memo[2].endpos == (size_t)-1) {
       parser->success = false;
       return false;
     }
-    parser->pos = parser->memo[0].endpos;
+    parser->pos = parser->memo[2].endpos;
     parser->success = true;
     return true;
   }
@@ -1834,8 +2485,8 @@ static bool parse_Break(Parser *parser) {
     fprintf(stderr, "%*sRule %s failed at position %zu\n", (int)parser->depth, "", "Break", parser->pos);
   }
 #endif
-  parser->memo[0].pos = start + 1;
-  parser->memo[0].endpos = parser->success ? parser->pos : (size_t)-1;
+  parser->memo[2].pos = start + 1;
+  parser->memo[2].endpos = parser->success ? parser->pos : (size_t)-1;
 
   parser->depth -= 1;
   return parser->success;
@@ -1934,7 +2585,7 @@ static bool parse_BreakLoop(Parser *parser) {
             if (parser->success) {
               { // Constant Capture
                 // A constant capture matches the empty string and produces all given values
-                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[3], 0, 0); // "break"
+                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[4], 0, 0); // "break"
               }
             }
           }
@@ -2031,7 +2682,7 @@ static bool parse_BreakLoop(Parser *parser) {
               if (parser->success) {
                 { // Constant Capture
                   // A constant capture matches the empty string and produces all given values
-                  pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[10], 0, 0); // "continue"
+                  pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[11], 0, 0); // "continue"
                 }
               }
             }
@@ -2124,7 +2775,7 @@ static bool parse_Callable(Parser *parser) {
 
                 { // Constant Capture
                   // A constant capture matches the empty string and produces all given values
-                  pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[34], 0, 0); // "ref"
+                  pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[35], 0, 0); // "ref"
                 }
                 if (parser->success) {
                   parse_Name(parser);
@@ -2180,7 +2831,7 @@ static bool parse_Callable(Parser *parser) {
 
           { // Constant Capture
             // A constant capture matches the empty string and produces all given values
-            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[32], 0, 0); // "parens"
+            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[33], 0, 0); // "parens"
           }
           if (parser->success) {
             parse_Parens(parser);
@@ -2225,7 +2876,7 @@ static bool parse_Callable(Parser *parser) {
 
                     { // Constant Capture
                       // A constant capture matches the empty string and produces all given values
-                      pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[34], 0, 0); // "ref"
+                      pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[35], 0, 0); // "ref"
                     }
                     if (parser->success) {
                       parse_Name(parser);
@@ -2272,7 +2923,7 @@ static bool parse_Callable(Parser *parser) {
 
               { // Constant Capture
                 // A constant capture matches the empty string and produces all given values
-                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[32], 0, 0); // "parens"
+                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[33], 0, 0); // "parens"
               }
               if (parser->success) {
                 parse_Parens(parser);
@@ -2307,6 +2958,95 @@ static bool parse_Callable(Parser *parser) {
   return parser->success;
 }
 
+static bool parse_CaseSep(Parser *parser) {
+  size_t start = parser->pos;
+  // Position-pure rule (no captures, labels, or other state): a
+  // single-slot memo short-circuits the repeated calls that backtracking
+  // alternatives make at the same position
+  if (parser->memo[3].pos == start + 1) {
+    if (parser->memo[3].endpos == (size_t)-1) {
+      parser->success = false;
+      return false;
+    }
+    parser->pos = parser->memo[3].endpos;
+    parser->success = true;
+    return true;
+  }
+
+  parser->depth += 1;
+  if (parser->depth > PGEN_MAX_DEPTH) {
+    // A Lua error (rather than a match failure) so the overflow can't be
+    // silently converted into a successful parse by a predicate or choice
+    luaL_error(parser->L, "pgen: max recursion depth (%d) exceeded at position %d", (int)PGEN_MAX_DEPTH, (int)(parser->pos + 1));
+  }
+
+#ifdef PGEN_DEBUG
+  fprintf(stderr, "%*sEntering rule %s at position %zu\n", (int)parser->depth, "", "CaseSep", start);
+#endif
+
+  { // Sequence with 2 patterns
+    REMEMBER_INPUT_POSITION(parser, pos);
+
+    { // At least 1 repetitions
+      REMEMBER_INPUT_POSITION(parser, pos);
+      size_t rep_count = 0;
+
+      while (true) {
+        parse_Break(parser);
+
+        if (!parser->success) {
+          break;
+        }
+
+        rep_count += 1;
+      }
+
+      // Don't recover if labeled failure was thrown
+      if (parser->throw_label) {
+        // Keep failure state, propagate labeled failure
+      } else if (rep_count >= 1) {
+        parser->success = true;
+      } else {
+        RESTORE_INPUT_POSITION(parser, pos);
+#ifdef PGEN_ERRORS
+        sprintf(parser->error_message, "Expected 1 repetitions at position %zu", parser->pos);
+#endif
+      }
+    }
+    if (parser->success) {
+      { // Zero or more repetitions
+        while (true) {
+          parse_EmptyLine(parser);
+          if (!parser->success) {
+            break;
+          }
+        }
+        // Only recover from ordinary failure, not labeled failure from T()
+        if (!parser->throw_label) {
+          parser->success = true;
+        }
+      }
+      if (!parser->success) {
+        RESTORE_INPUT_POSITION(parser, pos);
+      }
+    }
+  }
+
+#ifdef PGEN_DEBUG
+  if (parser->success) {
+    fprintf(stderr, "%*sRule %s matched range: %zu-%zu\n", (int)parser->depth, "", "CaseSep", start, parser->pos);
+    fprintf(stderr, "%*s\t%.*s\n", (int)parser->depth, "", (int)(parser->pos - start), parser->input + start);
+  } else {
+    fprintf(stderr, "%*sRule %s failed at position %zu\n", (int)parser->depth, "", "CaseSep", parser->pos);
+  }
+#endif
+  parser->memo[3].pos = start + 1;
+  parser->memo[3].endpos = parser->success ? parser->pos : (size_t)-1;
+
+  parser->depth -= 1;
+  return parser->success;
+}
+
 static bool parse_Chain(Parser *parser) {
   size_t start = parser->pos;
 
@@ -2330,7 +3070,7 @@ static bool parse_Chain(Parser *parser) {
 
         { // Constant Capture
           // A constant capture matches the empty string and produces all given values
-          pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[6], 0, 0); // "chain"
+          pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[7], 0, 0); // "chain"
         }
         if (parser->success) {
           {   // Choice
@@ -2422,7 +3162,7 @@ static bool parse_Chain(Parser *parser) {
 
           { // Constant Capture
             // A constant capture matches the empty string and produces all given values
-            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[6], 0, 0); // "chain"
+            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[7], 0, 0); // "chain"
           }
           if (parser->success) {
             parse_Space(parser);
@@ -2562,7 +3302,7 @@ static bool parse_ChainItem(Parser *parser) {
 
             { // Constant Capture
               // A constant capture matches the empty string and produces all given values
-              pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[25], 0, 0); // "index"
+              pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[26], 0, 0); // "index"
             }
             if (parser->success) {
               { // Match single character "["
@@ -2651,7 +3391,7 @@ static bool parse_ChainItem(Parser *parser) {
 
                 { // Constant Capture
                   // A constant capture matches the empty string and produces all given values
-                  pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[25], 0, 0); // "index"
+                  pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[26], 0, 0); // "index"
                 }
                 if (parser->success) {
                   { // Match single character "["
@@ -2831,9 +3571,9 @@ static bool parse_ChainValue(Parser *parser) {
   fprintf(stderr, "%*sEntering rule %s at position %zu\n", (int)parser->depth, "", "ChainValue", start);
 #endif
 
-  { // Transform Capture (Cfn id=5)
+  { // Transform Capture (Cfn id=6)
     size_t fn_cap_start = parser->cap_len;
-    pgen_cap_push(parser, PGEN_CAP_FN_OPEN, __cmt_refs[5], parser->pos, 0);
+    pgen_cap_push(parser, PGEN_CAP_FN_OPEN, __cmt_refs[6], parser->pos, 0);
     { // Sequence with 2 patterns
       REMEMBER_POSITION(parser, pos);
 
@@ -3039,7 +3779,7 @@ static bool parse_ClassBlock(Parser *parser) {
   fprintf(stderr, "%*sEntering rule %s at position %zu\n", (int)parser->depth, "", "ClassBlock", start);
 #endif
 
-  { // Sequence with 4 patterns
+  { // Sequence with 2 patterns
     REMEMBER_POSITION(parser, pos);
 
     { // At least 1 repetitions
@@ -3047,7 +3787,7 @@ static bool parse_ClassBlock(Parser *parser) {
       size_t rep_count = 0;
 
       while (true) {
-        parse_SpaceBreak(parser);
+        parse_EmptyLineNA(parser);
 
         if (!parser->success) {
           break;
@@ -3069,6 +3809,44 @@ static bool parse_ClassBlock(Parser *parser) {
       }
     }
     if (parser->success) {
+      parse_ClassBlockRest(parser);
+      if (!parser->success) {
+        RESTORE_POSITION(parser, pos);
+      }
+    }
+  }
+
+#ifdef PGEN_DEBUG
+  if (parser->success) {
+    fprintf(stderr, "%*sRule %s matched range: %zu-%zu\n", (int)parser->depth, "", "ClassBlock", start, parser->pos);
+    fprintf(stderr, "%*s\t%.*s\n", (int)parser->depth, "", (int)(parser->pos - start), parser->input + start);
+  } else {
+    fprintf(stderr, "%*sRule %s failed at position %zu\n", (int)parser->depth, "", "ClassBlock", parser->pos);
+  }
+#endif
+
+  parser->depth -= 1;
+  return parser->success;
+}
+
+static bool parse_ClassBlockRest(Parser *parser) {
+  size_t start = parser->pos;
+
+  parser->depth += 1;
+  if (parser->depth > PGEN_MAX_DEPTH) {
+    // A Lua error (rather than a match failure) so the overflow can't be
+    // silently converted into a successful parse by a predicate or choice
+    luaL_error(parser->L, "pgen: max recursion depth (%d) exceeded at position %d", (int)PGEN_MAX_DEPTH, (int)(parser->pos + 1));
+  }
+
+#ifdef PGEN_DEBUG
+  fprintf(stderr, "%*sEntering rule %s at position %zu\n", (int)parser->depth, "", "ClassBlockRest", start);
+#endif
+
+  {   // Choice
+    { // Sequence with 3 patterns
+      REMEMBER_POSITION(parser, pos);
+
       parse_Advance(parser);
       if (parser->success) {
         { // Capture Table
@@ -3089,7 +3867,7 @@ static bool parse_ClassBlock(Parser *parser) {
                       size_t rep_count = 0;
 
                       while (true) {
-                        parse_SpaceBreak(parser);
+                        parse_EmptyLineNA(parser);
 
                         if (!parser->success) {
                           break;
@@ -3141,19 +3919,48 @@ static bool parse_ClassBlock(Parser *parser) {
         if (parser->success) {
           parse_PopIndent(parser);
         }
+        if (!parser->success) {
+          RESTORE_POSITION(parser, pos);
+        }
       }
-      if (!parser->success) {
-        RESTORE_POSITION(parser, pos);
+    }
+
+    if (!parser->success && !parser->throw_label) {
+      parser->success = true;
+      { // Sequence with 3 patterns
+        REMEMBER_POSITION(parser, pos);
+
+        parse_AnnotationDiscard(parser);
+        if (parser->success) {
+          { // Zero or more repetitions
+            while (true) {
+              parse_EmptyLineNA(parser);
+              if (!parser->success) {
+                break;
+              }
+            }
+            // Only recover from ordinary failure, not labeled failure from T()
+            if (!parser->throw_label) {
+              parser->success = true;
+            }
+          }
+          if (parser->success) {
+            parse_ClassBlockRest(parser);
+          }
+          if (!parser->success) {
+            RESTORE_POSITION(parser, pos);
+          }
+        }
       }
     }
   }
 
 #ifdef PGEN_DEBUG
   if (parser->success) {
-    fprintf(stderr, "%*sRule %s matched range: %zu-%zu\n", (int)parser->depth, "", "ClassBlock", start, parser->pos);
+    fprintf(stderr, "%*sRule %s matched range: %zu-%zu\n", (int)parser->depth, "", "ClassBlockRest", start, parser->pos);
     fprintf(stderr, "%*s\t%.*s\n", (int)parser->depth, "", (int)(parser->pos - start), parser->input + start);
   } else {
-    fprintf(stderr, "%*sRule %s failed at position %zu\n", (int)parser->depth, "", "ClassBlock", parser->pos);
+    fprintf(stderr, "%*sRule %s failed at position %zu\n", (int)parser->depth, "", "ClassBlockRest", parser->pos);
   }
 #endif
 
@@ -3183,7 +3990,7 @@ static bool parse_ClassDecl(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[7], 0, 0); // "class"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[8], 0, 0); // "class"
       }
       if (parser->success) {
         parse_Space(parser);
@@ -3521,144 +4328,151 @@ static bool parse_ClassLine(Parser *parser) {
   fprintf(stderr, "%*sEntering rule %s at position %zu\n", (int)parser->depth, "", "ClassLine", start);
 #endif
 
-  { // Sequence with 3 patterns
-    REMEMBER_POSITION(parser, pos);
+  { // Choice
+    parse_AnnotationComment(parser);
 
-    parse_CheckIndent(parser);
-    if (parser->success) {
-      {     // Choice
-        {   // Choice
-          { // Capture Table
-            size_t ct_cap_start = parser->cap_len;
-            pgen_cap_push(parser, PGEN_CAP_TBL_OPEN, 0, 0, 0);
-            { // Sequence with 2 patterns
-              REMEMBER_POSITION(parser, pos);
+    if (!parser->success && !parser->throw_label) {
+      parser->success = true;
+      { // Sequence with 3 patterns
+        REMEMBER_POSITION(parser, pos);
 
-              { // Constant Capture
-                // A constant capture matches the empty string and produces all given values
-                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[33], 0, 0); // "props"
-              }
-              if (parser->success) {
-                parse_KeyValueList(parser);
-                if (!parser->success) {
-                  RESTORE_POSITION(parser, pos);
-                }
-              }
-            }
+        parse_CheckIndent(parser);
+        if (parser->success) {
+          {     // Choice
+            {   // Choice
+              { // Capture Table
+                size_t ct_cap_start = parser->cap_len;
+                pgen_cap_push(parser, PGEN_CAP_TBL_OPEN, 0, 0, 0);
+                { // Sequence with 2 patterns
+                  REMEMBER_POSITION(parser, pos);
 
-            if (parser->success) {
-              pgen_cap_push(parser, PGEN_CAP_TBL_CLOSE, 0, 0, 0);
-            } else {
-              parser->cap_len = ct_cap_start;
-            }
-          }
-
-          if (!parser->success && !parser->throw_label) {
-            parser->success = true;
-            { // Capture Table
-              size_t ct_cap_start = parser->cap_len;
-              pgen_cap_push(parser, PGEN_CAP_TBL_OPEN, 0, 0, 0);
-              { // Sequence with 2 patterns
-                REMEMBER_POSITION(parser, pos);
-
-                { // Constant Capture
-                  // A constant capture matches the empty string and produces all given values
-                  pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[41], 0, 0); // "stm"
-                }
-                if (parser->success) {
-                  parse_Statement(parser);
-                  if (!parser->success) {
-                    RESTORE_POSITION(parser, pos);
+                  { // Constant Capture
+                    // A constant capture matches the empty string and produces all given values
+                    pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[34], 0, 0); // "props"
                   }
-                }
-              }
-
-              if (parser->success) {
-                pgen_cap_push(parser, PGEN_CAP_TBL_CLOSE, 0, 0, 0);
-              } else {
-                parser->cap_len = ct_cap_start;
-              }
-            }
-          }
-        }
-
-        if (!parser->success && !parser->throw_label) {
-          parser->success = true;
-          { // Capture Table
-            size_t ct_cap_start = parser->cap_len;
-            pgen_cap_push(parser, PGEN_CAP_TBL_OPEN, 0, 0, 0);
-            { // Sequence with 2 patterns
-              REMEMBER_POSITION(parser, pos);
-
-              { // Constant Capture
-                // A constant capture matches the empty string and produces all given values
-                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[41], 0, 0); // "stm"
-              }
-              if (parser->success) {
-                parse_Exp(parser);
-                if (!parser->success) {
-                  RESTORE_POSITION(parser, pos);
-                }
-              }
-            }
-
-            if (parser->success) {
-              pgen_cap_push(parser, PGEN_CAP_TBL_CLOSE, 0, 0, 0);
-            } else {
-              parser->cap_len = ct_cap_start;
-            }
-          }
-        }
-      }
-      if (parser->success) {
-        { // At most 1 repetitions
-          size_t rep_count = 0;
-
-          while (rep_count < 1) {
-            size_t before_pos = parser->pos;
-
-            {
-              { // Sequence with 2 patterns
-                REMEMBER_INPUT_POSITION(parser, pos);
-
-                parse_Space(parser);
-                if (parser->success) {
-                  { // Match single character ","
-                    if (parser->pos < parser->input_len &&
-                        parser->input[parser->pos] == 44) {
-                      parser->pos++;
-                    } else {
-#ifdef PGEN_ERRORS
-                      sprintf(parser->error_message, "Expected character `"
-                                                     ","
-                                                     "` at position %zu",
-                              parser->pos);
-#endif
-                      parser->success = false;
+                  if (parser->success) {
+                    parse_KeyValueList(parser);
+                    if (!parser->success) {
+                      RESTORE_POSITION(parser, pos);
                     }
                   }
-                  if (!parser->success) {
-                    RESTORE_INPUT_POSITION(parser, pos);
+                }
+
+                if (parser->success) {
+                  pgen_cap_push(parser, PGEN_CAP_TBL_CLOSE, 0, 0, 0);
+                } else {
+                  parser->cap_len = ct_cap_start;
+                }
+              }
+
+              if (!parser->success && !parser->throw_label) {
+                parser->success = true;
+                { // Capture Table
+                  size_t ct_cap_start = parser->cap_len;
+                  pgen_cap_push(parser, PGEN_CAP_TBL_OPEN, 0, 0, 0);
+                  { // Sequence with 2 patterns
+                    REMEMBER_POSITION(parser, pos);
+
+                    { // Constant Capture
+                      // A constant capture matches the empty string and produces all given values
+                      pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[42], 0, 0); // "stm"
+                    }
+                    if (parser->success) {
+                      parse_Statement(parser);
+                      if (!parser->success) {
+                        RESTORE_POSITION(parser, pos);
+                      }
+                    }
+                  }
+
+                  if (parser->success) {
+                    pgen_cap_push(parser, PGEN_CAP_TBL_CLOSE, 0, 0, 0);
+                  } else {
+                    parser->cap_len = ct_cap_start;
                   }
                 }
               }
             }
 
-            if (!parser->success || before_pos == parser->pos) {
-              // Break on failure or zero-width match
-              // Only recover from ordinary failure, not labeled failure from T()
-              if (!parser->throw_label) {
-                parser->success = true;
-              }
-              break;
-            }
+            if (!parser->success && !parser->throw_label) {
+              parser->success = true;
+              { // Capture Table
+                size_t ct_cap_start = parser->cap_len;
+                pgen_cap_push(parser, PGEN_CAP_TBL_OPEN, 0, 0, 0);
+                { // Sequence with 2 patterns
+                  REMEMBER_POSITION(parser, pos);
 
-            rep_count += 1;
+                  { // Constant Capture
+                    // A constant capture matches the empty string and produces all given values
+                    pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[42], 0, 0); // "stm"
+                  }
+                  if (parser->success) {
+                    parse_Exp(parser);
+                    if (!parser->success) {
+                      RESTORE_POSITION(parser, pos);
+                    }
+                  }
+                }
+
+                if (parser->success) {
+                  pgen_cap_push(parser, PGEN_CAP_TBL_CLOSE, 0, 0, 0);
+                } else {
+                  parser->cap_len = ct_cap_start;
+                }
+              }
+            }
+          }
+          if (parser->success) {
+            { // At most 1 repetitions
+              size_t rep_count = 0;
+
+              while (rep_count < 1) {
+                size_t before_pos = parser->pos;
+
+                {
+                  { // Sequence with 2 patterns
+                    REMEMBER_INPUT_POSITION(parser, pos);
+
+                    parse_Space(parser);
+                    if (parser->success) {
+                      { // Match single character ","
+                        if (parser->pos < parser->input_len &&
+                            parser->input[parser->pos] == 44) {
+                          parser->pos++;
+                        } else {
+#ifdef PGEN_ERRORS
+                          sprintf(parser->error_message, "Expected character `"
+                                                         ","
+                                                         "` at position %zu",
+                                  parser->pos);
+#endif
+                          parser->success = false;
+                        }
+                      }
+                      if (!parser->success) {
+                        RESTORE_INPUT_POSITION(parser, pos);
+                      }
+                    }
+                  }
+                }
+
+                if (!parser->success || before_pos == parser->pos) {
+                  // Break on failure or zero-width match
+                  // Only recover from ordinary failure, not labeled failure from T()
+                  if (!parser->throw_label) {
+                    parser->success = true;
+                  }
+                  break;
+                }
+
+                rep_count += 1;
+              }
+            }
+          }
+          if (!parser->success) {
+            RESTORE_POSITION(parser, pos);
           }
         }
-      }
-      if (!parser->success) {
-        RESTORE_POSITION(parser, pos);
       }
     }
   }
@@ -3789,7 +4603,7 @@ static bool parse_ColonChainItem(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[8], 0, 0); // "colon"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[9], 0, 0); // "colon"
       }
       if (parser->success) {
         { // Match single character "\\"
@@ -3840,12 +4654,12 @@ static bool parse_Comment(Parser *parser) {
   // Position-pure rule (no captures, labels, or other state): a
   // single-slot memo short-circuits the repeated calls that backtracking
   // alternatives make at the same position
-  if (parser->memo[1].pos == start + 1) {
-    if (parser->memo[1].endpos == (size_t)-1) {
+  if (parser->memo[4].pos == start + 1) {
+    if (parser->memo[4].endpos == (size_t)-1) {
       parser->success = false;
       return false;
     }
-    parser->pos = parser->memo[1].endpos;
+    parser->pos = parser->memo[4].endpos;
     parser->success = true;
     return true;
   }
@@ -3986,8 +4800,8 @@ static bool parse_Comment(Parser *parser) {
     fprintf(stderr, "%*sRule %s failed at position %zu\n", (int)parser->depth, "", "Comment", parser->pos);
   }
 #endif
-  parser->memo[1].pos = start + 1;
-  parser->memo[1].endpos = parser->success ? parser->pos : (size_t)-1;
+  parser->memo[4].pos = start + 1;
+  parser->memo[4].endpos = parser->success ? parser->pos : (size_t)-1;
 
   parser->depth -= 1;
   return parser->success;
@@ -4027,7 +4841,7 @@ static bool parse_CompClause(Parser *parser) {
 
           { // Constant Capture
             // A constant capture matches the empty string and produces all given values
-            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[49], 0, 0); // "when"
+            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[50], 0, 0); // "when"
           }
           if (parser->success) {
             parse_Space(parser);
@@ -4159,7 +4973,7 @@ static bool parse_CompFor(Parser *parser) {
 
           { // Constant Capture
             // A constant capture matches the empty string and produces all given values
-            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[21], 0, 0); // "for"
+            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[22], 0, 0); // "for"
           }
           if (parser->success) {
             { // Match literal "for"
@@ -4397,7 +5211,7 @@ static bool parse_CompForEach(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[22], 0, 0); // "foreach"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[23], 0, 0); // "foreach"
       }
       if (parser->success) {
         parse_Space(parser);
@@ -4581,7 +5395,7 @@ static bool parse_CompForEach(Parser *parser) {
 
                                   { // Constant Capture
                                     // A constant capture matches the empty string and produces all given values
-                                    pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[47], 0, 0); // "unpack"
+                                    pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[48], 0, 0); // "unpack"
                                   }
                                   if (parser->success) {
                                     parse_Exp(parser);
@@ -4731,7 +5545,7 @@ static bool parse_Comprehension(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[9], 0, 0); // "comprehension"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[10], 0, 0); // "comprehension"
       }
       if (parser->success) {
         parse_Space(parser);
@@ -4824,7 +5638,7 @@ static bool parse_Do(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[13], 0, 0); // "do"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[14], 0, 0); // "do"
       }
       if (parser->success) {
         parse_Space(parser);
@@ -4949,7 +5763,7 @@ static bool parse_DotChainItem(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[14], 0, 0); // "dot"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[15], 0, 0); // "dot"
       }
       if (parser->success) {
         { // Match single character "."
@@ -5017,7 +5831,7 @@ static bool parse_DoubleString(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[42], 0, 0); // "string"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[43], 0, 0); // "string"
       }
       if (parser->success) {
         { // Capture
@@ -5188,12 +6002,12 @@ static bool parse_DoubleStringInner(Parser *parser) {
   // Position-pure rule (no captures, labels, or other state): a
   // single-slot memo short-circuits the repeated calls that backtracking
   // alternatives make at the same position
-  if (parser->memo[2].pos == start + 1) {
-    if (parser->memo[2].endpos == (size_t)-1) {
+  if (parser->memo[5].pos == start + 1) {
+    if (parser->memo[5].endpos == (size_t)-1) {
       parser->success = false;
       return false;
     }
-    parser->pos = parser->memo[2].endpos;
+    parser->pos = parser->memo[5].endpos;
     parser->success = true;
     return true;
   }
@@ -5317,8 +6131,8 @@ static bool parse_DoubleStringInner(Parser *parser) {
     fprintf(stderr, "%*sRule %s failed at position %zu\n", (int)parser->depth, "", "DoubleStringInner", parser->pos);
   }
 #endif
-  parser->memo[2].pos = start + 1;
-  parser->memo[2].endpos = parser->success ? parser->pos : (size_t)-1;
+  parser->memo[5].pos = start + 1;
+  parser->memo[5].endpos = parser->success ? parser->pos : (size_t)-1;
 
   parser->depth -= 1;
   return parser->success;
@@ -5346,7 +6160,7 @@ static bool parse_DoubleStringInterp(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[26], 0, 0); // "interpolate"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[27], 0, 0); // "interpolate"
       }
       if (parser->success) {
         { // Match literal "#{"
@@ -5417,12 +6231,12 @@ static bool parse_EmptyLine(Parser *parser) {
   // Position-pure rule (no captures, labels, or other state): a
   // single-slot memo short-circuits the repeated calls that backtracking
   // alternatives make at the same position
-  if (parser->memo[3].pos == start + 1) {
-    if (parser->memo[3].endpos == (size_t)-1) {
+  if (parser->memo[6].pos == start + 1) {
+    if (parser->memo[6].endpos == (size_t)-1) {
       parser->success = false;
       return false;
     }
-    parser->pos = parser->memo[3].endpos;
+    parser->pos = parser->memo[6].endpos;
     parser->success = true;
     return true;
   }
@@ -5448,8 +6262,147 @@ static bool parse_EmptyLine(Parser *parser) {
     fprintf(stderr, "%*sRule %s failed at position %zu\n", (int)parser->depth, "", "EmptyLine", parser->pos);
   }
 #endif
-  parser->memo[3].pos = start + 1;
-  parser->memo[3].endpos = parser->success ? parser->pos : (size_t)-1;
+  parser->memo[6].pos = start + 1;
+  parser->memo[6].endpos = parser->success ? parser->pos : (size_t)-1;
+
+  parser->depth -= 1;
+  return parser->success;
+}
+
+static bool parse_EmptyLineNA(Parser *parser) {
+  size_t start = parser->pos;
+  // Position-pure rule (no captures, labels, or other state): a
+  // single-slot memo short-circuits the repeated calls that backtracking
+  // alternatives make at the same position
+  if (parser->memo[7].pos == start + 1) {
+    if (parser->memo[7].endpos == (size_t)-1) {
+      parser->success = false;
+      return false;
+    }
+    parser->pos = parser->memo[7].endpos;
+    parser->success = true;
+    return true;
+  }
+
+  parser->depth += 1;
+  if (parser->depth > PGEN_MAX_DEPTH) {
+    // A Lua error (rather than a match failure) so the overflow can't be
+    // silently converted into a successful parse by a predicate or choice
+    luaL_error(parser->L, "pgen: max recursion depth (%d) exceeded at position %d", (int)PGEN_MAX_DEPTH, (int)(parser->pos + 1));
+  }
+
+#ifdef PGEN_DEBUG
+  fprintf(stderr, "%*sEntering rule %s at position %zu\n", (int)parser->depth, "", "EmptyLineNA", start);
+#endif
+
+  { // Sequence with 4 patterns
+    REMEMBER_INPUT_POSITION(parser, pos);
+
+    { // Zero or more repetitions
+      while (true) {
+        { // Match character set " \t"
+          if (parser->pos < parser->input_len) {
+            switch (parser->input[parser->pos]) {
+            case 32: /* " " */
+            case 9:  /* "\t" */
+              parser->pos++;
+              break;
+            default:
+#ifdef PGEN_ERRORS
+              sprintf(parser->error_message, "Expected one of "
+                                             "\" \\t\""
+                                             " at position %zu",
+                      parser->pos);
+#endif
+              parser->success = false;
+            }
+          } else {
+#ifdef PGEN_ERRORS
+            sprintf(parser->error_message, "Expected one of "
+                                           "\" \\t\""
+                                           " at position %zu but reached end of input",
+                    parser->pos);
+#endif
+            parser->success = false;
+          }
+        }
+        if (!parser->success) {
+          break;
+        }
+      }
+      // Only recover from ordinary failure, not labeled failure from T()
+      if (!parser->throw_label) {
+        parser->success = true;
+      }
+    }
+    if (parser->success) {
+      { // Negate (only match if pattern fails)
+        REMEMBER_INPUT_POSITION(parser, pos);
+
+        parse_AnnotationPrefix(parser);
+
+        if (parser->success) {
+          // Pattern matched, so negate fails
+          RESTORE_INPUT_POSITION(parser, pos);
+          parser->success = false;
+          PGEN_RECORD_FURTHEST(parser);
+#ifdef PGEN_ERRORS
+          sprintf(parser->error_message, "Negated pattern unexpectedly matched at position %zu", pos.pos);
+#endif
+        } else {
+          // Pattern failed, so negate succeeds
+          parser->success = true;
+          // Swallow labeled failures inside predicates (LPegLabel behavior)
+          if (parser->throw_label) {
+            parser->throw_label = NULL;
+            parser->throw_pos = 0;
+          }
+          RESTORE_INPUT_POSITION(parser, pos); // Restore original position (technically not necessary since failed pattern should make no changes to position)
+        }
+      }
+      if (parser->success) {
+        { // At most 1 repetitions
+          size_t rep_count = 0;
+
+          while (rep_count < 1) {
+            size_t before_pos = parser->pos;
+
+            {
+              parse_Comment(parser);
+            }
+
+            if (!parser->success || before_pos == parser->pos) {
+              // Break on failure or zero-width match
+              // Only recover from ordinary failure, not labeled failure from T()
+              if (!parser->throw_label) {
+                parser->success = true;
+              }
+              break;
+            }
+
+            rep_count += 1;
+          }
+        }
+        if (parser->success) {
+          parse_Break(parser);
+        }
+      }
+      if (!parser->success) {
+        RESTORE_INPUT_POSITION(parser, pos);
+      }
+    }
+  }
+
+#ifdef PGEN_DEBUG
+  if (parser->success) {
+    fprintf(stderr, "%*sRule %s matched range: %zu-%zu\n", (int)parser->depth, "", "EmptyLineNA", start, parser->pos);
+    fprintf(stderr, "%*s\t%.*s\n", (int)parser->depth, "", (int)(parser->pos - start), parser->input + start);
+  } else {
+    fprintf(stderr, "%*sRule %s failed at position %zu\n", (int)parser->depth, "", "EmptyLineNA", parser->pos);
+  }
+#endif
+  parser->memo[7].pos = start + 1;
+  parser->memo[7].endpos = parser->success ? parser->pos : (size_t)-1;
 
   parser->depth -= 1;
   return parser->success;
@@ -5469,9 +6422,9 @@ static bool parse_Exp(Parser *parser) {
   fprintf(stderr, "%*sEntering rule %s at position %zu\n", (int)parser->depth, "", "Exp", start);
 #endif
 
-  { // Transform Capture (Cfn id=6)
+  { // Transform Capture (Cfn id=4)
     size_t fn_cap_start = parser->cap_len;
-    pgen_cap_push(parser, PGEN_CAP_FN_OPEN, __cmt_refs[6], parser->pos, 0);
+    pgen_cap_push(parser, PGEN_CAP_FN_OPEN, __cmt_refs[4], parser->pos, 0);
     { // Sequence with 2 patterns
       REMEMBER_POSITION(parser, pos);
 
@@ -5736,7 +6689,7 @@ static bool parse_Export(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[18], 0, 0); // "export"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[19], 0, 0); // "export"
       }
       if (parser->success) {
         parse_Space(parser);
@@ -5843,7 +6796,7 @@ static bool parse_Export(Parser *parser) {
 
                     { // Constant Capture
                       // A constant capture matches the empty string and produces all given values
-                      pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[7], 0, 0); // "class"
+                      pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[8], 0, 0); // "class"
                     }
                     if (parser->success) {
                       parse_ClassDecl(parser);
@@ -6026,7 +6979,7 @@ static bool parse_Export(Parser *parser) {
 
                         { // Constant Capture
                           // A constant capture matches the empty string and produces all given values
-                          pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[7], 0, 0); // "class"
+                          pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[8], 0, 0); // "class"
                         }
                         if (parser->success) {
                           parse_ClassDecl(parser);
@@ -7268,7 +8221,7 @@ static bool parse_For(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[21], 0, 0); // "for"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[22], 0, 0); // "for"
       }
       if (parser->success) {
         parse_Space(parser);
@@ -7624,7 +8577,7 @@ static bool parse_ForEach(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[22], 0, 0); // "foreach"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[23], 0, 0); // "foreach"
       }
       if (parser->success) {
         parse_Space(parser);
@@ -7815,7 +8768,7 @@ static bool parse_ForEach(Parser *parser) {
 
                                       { // Constant Capture
                                         // A constant capture matches the empty string and produces all given values
-                                        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[47], 0, 0); // "unpack"
+                                        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[48], 0, 0); // "unpack"
                                       }
                                       if (parser->success) {
                                         parse_Exp(parser);
@@ -8021,7 +8974,7 @@ static bool parse_FunLit(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[20], 0, 0); // "fndef"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[21], 0, 0); // "fndef"
       }
       if (parser->success) {
         parse_FnArgsDef(parser);
@@ -8050,7 +9003,7 @@ static bool parse_FunLit(Parser *parser) {
                 if (parser->success) {
                   { // Constant Capture
                     // A constant capture matches the empty string and produces all given values
-                    pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[40], 0, 0); // "slim"
+                    pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[41], 0, 0); // "slim"
                   }
                 }
                 if (!parser->success) {
@@ -8084,7 +9037,7 @@ static bool parse_FunLit(Parser *parser) {
                   if (parser->success) {
                     { // Constant Capture
                       // A constant capture matches the empty string and produces all given values
-                      pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[19], 0, 0); // "fat"
+                      pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[20], 0, 0); // "fat"
                     }
                   }
                   if (!parser->success) {
@@ -8177,7 +9130,7 @@ static bool parse_If(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[23], 0, 0); // "if"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[24], 0, 0); // "if"
       }
       if (parser->success) {
         parse_Space(parser);
@@ -8514,7 +9467,7 @@ static bool parse_IfElse(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[15], 0, 0); // "else"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[16], 0, 0); // "else"
       }
       if (parser->success) {
         { // At most 1 repetitions
@@ -8687,7 +9640,7 @@ static bool parse_IfElseIf(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[16], 0, 0); // "elseif"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[17], 0, 0); // "elseif"
       }
       if (parser->success) {
         { // At most 1 repetitions
@@ -8986,7 +9939,7 @@ static bool parse_Import(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[24], 0, 0); // "import"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[25], 0, 0); // "import"
       }
       if (parser->success) {
         parse_Space(parser);
@@ -9232,7 +10185,7 @@ static bool parse_ImportName(Parser *parser) {
 
               { // Constant Capture
                 // A constant capture matches the empty string and produces all given values
-                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[8], 0, 0); // "colon"
+                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[9], 0, 0); // "colon"
               }
               if (parser->success) {
                 parse_Name(parser);
@@ -9509,7 +10462,7 @@ static bool parse_Invoke(Parser *parser) {
 
           { // Constant Capture
             // A constant capture matches the empty string and produces all given values
-            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[4], 0, 0); // "call"
+            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[5], 0, 0); // "call"
           }
           if (parser->success) {
             parse_FnArgs(parser);
@@ -9539,7 +10492,7 @@ static bool parse_Invoke(Parser *parser) {
 
           { // Constant Capture
             // A constant capture matches the empty string and produces all given values
-            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[4], 0, 0); // "call"
+            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[5], 0, 0); // "call"
           }
           if (parser->success) {
             { // Capture Table
@@ -9579,7 +10532,7 @@ static bool parse_Invoke(Parser *parser) {
 
           { // Constant Capture
             // A constant capture matches the empty string and produces all given values
-            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[4], 0, 0); // "call"
+            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[5], 0, 0); // "call"
           }
           if (parser->success) {
             { // Capture Table
@@ -9646,7 +10599,7 @@ static bool parse_Invoke(Parser *parser) {
 
               { // Constant Capture
                 // A constant capture matches the empty string and produces all given values
-                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[4], 0, 0); // "call"
+                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[5], 0, 0); // "call"
               }
               if (parser->success) {
                 { // Capture Table
@@ -9696,7 +10649,7 @@ static bool parse_Invoke(Parser *parser) {
 
               { // Constant Capture
                 // A constant capture matches the empty string and produces all given values
-                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[4], 0, 0); // "call"
+                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[5], 0, 0); // "call"
               }
               if (parser->success) {
                 parse_FnArgs(parser);
@@ -9723,7 +10676,7 @@ static bool parse_Invoke(Parser *parser) {
 
               { // Constant Capture
                 // A constant capture matches the empty string and produces all given values
-                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[4], 0, 0); // "call"
+                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[5], 0, 0); // "call"
               }
               if (parser->success) {
                 { // Capture Table
@@ -9760,7 +10713,7 @@ static bool parse_Invoke(Parser *parser) {
 
               { // Constant Capture
                 // A constant capture matches the empty string and produces all given values
-                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[4], 0, 0); // "call"
+                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[5], 0, 0); // "call"
               }
               if (parser->success) {
                 { // Capture Table
@@ -9824,7 +10777,7 @@ static bool parse_Invoke(Parser *parser) {
 
                   { // Constant Capture
                     // A constant capture matches the empty string and produces all given values
-                    pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[4], 0, 0); // "call"
+                    pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[5], 0, 0); // "call"
                   }
                   if (parser->success) {
                     { // Capture Table
@@ -10096,7 +11049,7 @@ static bool parse_KeyName(Parser *parser) {
 
               { // Constant Capture
                 // A constant capture matches the empty string and produces all given values
-                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[27], 0, 0); // "key_literal"
+                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[28], 0, 0); // "key_literal"
               }
               if (parser->success) {
                 parse_NameRaw(parser);
@@ -10148,9 +11101,9 @@ static bool parse_KeyValue(Parser *parser) {
 #endif
 
   {   // Choice
-    { // Transform Capture (Cfn id=4)
+    { // Transform Capture (Cfn id=5)
       size_t fn_cap_start = parser->cap_len;
-      pgen_cap_push(parser, PGEN_CAP_FN_OPEN, __cmt_refs[4], parser->pos, 0);
+      pgen_cap_push(parser, PGEN_CAP_FN_OPEN, __cmt_refs[5], parser->pos, 0);
       { // Sequence with 5 patterns
         REMEMBER_POSITION(parser, pos);
 
@@ -10762,34 +11715,137 @@ static bool parse_Line(Parser *parser) {
   fprintf(stderr, "%*sEntering rule %s at position %zu\n", (int)parser->depth, "", "Line", start);
 #endif
 
-  {   // Choice
-    { // Sequence with 2 patterns
-      REMEMBER_POSITION(parser, pos);
+  {     // Choice
+    {   // Choice
+      { // Sequence with 2 patterns
+        REMEMBER_POSITION(parser, pos);
 
-      parse_CheckIndent(parser);
-      if (parser->success) {
-        parse_Statement(parser);
-        if (!parser->success) {
-          RESTORE_POSITION(parser, pos);
+        parse_AnnotationIndent(parser);
+        if (parser->success) {
+          parse_AnnotationComment(parser);
+          if (!parser->success) {
+            RESTORE_POSITION(parser, pos);
+          }
+        }
+      }
+
+      if (!parser->success && !parser->throw_label) {
+        parser->success = true;
+        { // Sequence with 2 patterns
+          REMEMBER_POSITION(parser, pos);
+
+          parse_CheckIndent(parser);
+          if (parser->success) {
+            parse_Statement(parser);
+            if (!parser->success) {
+              RESTORE_POSITION(parser, pos);
+            }
+          }
         }
       }
     }
 
     if (!parser->success && !parser->throw_label) {
       parser->success = true;
-      { // Sequence with 2 patterns
+      { // Sequence with 4 patterns
         REMEMBER_INPUT_POSITION(parser, pos);
 
-        parse_Space(parser);
+        { // Zero or more repetitions
+          while (true) {
+            { // Match character set " \t"
+              if (parser->pos < parser->input_len) {
+                switch (parser->input[parser->pos]) {
+                case 32: /* " " */
+                case 9:  /* "\t" */
+                  parser->pos++;
+                  break;
+                default:
+#ifdef PGEN_ERRORS
+                  sprintf(parser->error_message, "Expected one of "
+                                                 "\" \\t\""
+                                                 " at position %zu",
+                          parser->pos);
+#endif
+                  parser->success = false;
+                }
+              } else {
+#ifdef PGEN_ERRORS
+                sprintf(parser->error_message, "Expected one of "
+                                               "\" \\t\""
+                                               " at position %zu but reached end of input",
+                        parser->pos);
+#endif
+                parser->success = false;
+              }
+            }
+            if (!parser->success) {
+              break;
+            }
+          }
+          // Only recover from ordinary failure, not labeled failure from T()
+          if (!parser->throw_label) {
+            parser->success = true;
+          }
+        }
         if (parser->success) {
-          { // Lookahead (match without consuming input)
+          { // Negate (only match if pattern fails)
             REMEMBER_INPUT_POSITION(parser, pos);
 
-            parse_Stop(parser);
+            parse_AnnotationPrefix(parser);
 
             if (parser->success) {
-              // Pattern matched, but we don't consume any input
+              // Pattern matched, so negate fails
               RESTORE_INPUT_POSITION(parser, pos);
+              parser->success = false;
+              PGEN_RECORD_FURTHEST(parser);
+#ifdef PGEN_ERRORS
+              sprintf(parser->error_message, "Negated pattern unexpectedly matched at position %zu", pos.pos);
+#endif
+            } else {
+              // Pattern failed, so negate succeeds
+              parser->success = true;
+              // Swallow labeled failures inside predicates (LPegLabel behavior)
+              if (parser->throw_label) {
+                parser->throw_label = NULL;
+                parser->throw_pos = 0;
+              }
+              RESTORE_INPUT_POSITION(parser, pos); // Restore original position (technically not necessary since failed pattern should make no changes to position)
+            }
+          }
+          if (parser->success) {
+            { // At most 1 repetitions
+              size_t rep_count = 0;
+
+              while (rep_count < 1) {
+                size_t before_pos = parser->pos;
+
+                {
+                  parse_Comment(parser);
+                }
+
+                if (!parser->success || before_pos == parser->pos) {
+                  // Break on failure or zero-width match
+                  // Only recover from ordinary failure, not labeled failure from T()
+                  if (!parser->throw_label) {
+                    parser->success = true;
+                  }
+                  break;
+                }
+
+                rep_count += 1;
+              }
+            }
+            if (parser->success) {
+              { // Lookahead (match without consuming input)
+                REMEMBER_INPUT_POSITION(parser, pos);
+
+                parse_Stop(parser);
+
+                if (parser->success) {
+                  // Pattern matched, but we don't consume any input
+                  RESTORE_INPUT_POSITION(parser, pos);
+                }
+              }
             }
           }
           if (!parser->success) {
@@ -10909,7 +11965,7 @@ static bool parse_Local(Parser *parser) {
 
                 { // Constant Capture
                   // A constant capture matches the empty string and produces all given values
-                  pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[11], 0, 0); // "declare_glob"
+                  pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[12], 0, 0); // "declare_glob"
                 }
                 if (parser->success) {
                   {   // Choice
@@ -11003,7 +12059,7 @@ static bool parse_Local(Parser *parser) {
 
                   { // Constant Capture
                     // A constant capture matches the empty string and produces all given values
-                    pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[12], 0, 0); // "declare_with_shadows"
+                    pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[13], 0, 0); // "declare_with_shadows"
                   }
                   if (parser->success) {
                     { // Capture Table
@@ -13598,7 +14654,7 @@ static bool parse_Num(Parser *parser) {
 
           { // Constant Capture
             // A constant capture matches the empty string and produces all given values
-            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[31], 0, 0); // "number"
+            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[32], 0, 0); // "number"
           }
           if (parser->success) {
             { // Capture
@@ -14578,7 +15634,7 @@ static bool parse_Return(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[35], 0, 0); // "return"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[36], 0, 0); // "return"
       }
       if (parser->success) {
         parse_Space(parser);
@@ -14660,7 +15716,7 @@ static bool parse_Return(Parser *parser) {
 
                     { // Constant Capture
                       // A constant capture matches the empty string and produces all given values
-                      pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[17], 0, 0); // "explist"
+                      pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[18], 0, 0); // "explist"
                     }
                     if (parser->success) {
                       parse_ExpListLow(parser);
@@ -14795,7 +15851,7 @@ static bool parse_SelfName(Parser *parser) {
 
                       { // Constant Capture
                         // A constant capture matches the empty string and produces all given values
-                        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[38], 0, 0); // "self_class"
+                        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[39], 0, 0); // "self_class"
                       }
                       if (parser->success) {
                         parse_NameRaw(parser);
@@ -14816,7 +15872,7 @@ static bool parse_SelfName(Parser *parser) {
                     parser->success = true;
                     { // Constant Capture
                       // A constant capture matches the empty string and produces all given values
-                      pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[37], 0, 0); // "self.__class"
+                      pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[38], 0, 0); // "self.__class"
                     }
                   }
                 }
@@ -14836,7 +15892,7 @@ static bool parse_SelfName(Parser *parser) {
 
                   { // Constant Capture
                     // A constant capture matches the empty string and produces all given values
-                    pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[36], 0, 0); // "self"
+                    pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[37], 0, 0); // "self"
                   }
                   if (parser->success) {
                     parse_NameRaw(parser);
@@ -14859,7 +15915,7 @@ static bool parse_SelfName(Parser *parser) {
             parser->success = true;
             { // Constant Capture
               // A constant capture matches the empty string and produces all given values
-              pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[36], 0, 0); // "self"
+              pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[37], 0, 0); // "self"
             }
           }
         }
@@ -14888,12 +15944,12 @@ static bool parse_Shebang(Parser *parser) {
   // Position-pure rule (no captures, labels, or other state): a
   // single-slot memo short-circuits the repeated calls that backtracking
   // alternatives make at the same position
-  if (parser->memo[4].pos == start + 1) {
-    if (parser->memo[4].endpos == (size_t)-1) {
+  if (parser->memo[8].pos == start + 1) {
+    if (parser->memo[8].endpos == (size_t)-1) {
       parser->success = false;
       return false;
     }
-    parser->pos = parser->memo[4].endpos;
+    parser->pos = parser->memo[8].endpos;
     parser->success = true;
     return true;
   }
@@ -14997,8 +16053,8 @@ static bool parse_Shebang(Parser *parser) {
     fprintf(stderr, "%*sRule %s failed at position %zu\n", (int)parser->depth, "", "Shebang", parser->pos);
   }
 #endif
-  parser->memo[4].pos = start + 1;
-  parser->memo[4].endpos = parser->success ? parser->pos : (size_t)-1;
+  parser->memo[8].pos = start + 1;
+  parser->memo[8].endpos = parser->success ? parser->pos : (size_t)-1;
 
   parser->depth -= 1;
   return parser->success;
@@ -15178,7 +16234,7 @@ static bool parse_SimpleValue(Parser *parser) {
 
           { // Constant Capture
             // A constant capture matches the empty string and produces all given values
-            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[29], 0, 0); // "minus"
+            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[30], 0, 0); // "minus"
           }
           if (parser->success) {
             parse_Space(parser);
@@ -15253,7 +16309,7 @@ static bool parse_SimpleValue(Parser *parser) {
 
           { // Constant Capture
             // A constant capture matches the empty string and produces all given values
-            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[28], 0, 0); // "length"
+            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[29], 0, 0); // "length"
           }
           if (parser->success) {
             parse_Space(parser);
@@ -15302,7 +16358,7 @@ static bool parse_SimpleValue(Parser *parser) {
 
           { // Constant Capture
             // A constant capture matches the empty string and produces all given values
-            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[2], 0, 0); // "bitnot"
+            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[3], 0, 0); // "bitnot"
           }
           if (parser->success) {
             parse_Space(parser);
@@ -15351,7 +16407,7 @@ static bool parse_SimpleValue(Parser *parser) {
 
           { // Constant Capture
             // A constant capture matches the empty string and produces all given values
-            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[30], 0, 0); // "not"
+            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[31], 0, 0); // "not"
           }
           if (parser->success) {
             parse_Space(parser);
@@ -15549,7 +16605,7 @@ static bool parse_SimpleValue(Parser *parser) {
 
               { // Constant Capture
                 // A constant capture matches the empty string and produces all given values
-                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[29], 0, 0); // "minus"
+                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[30], 0, 0); // "minus"
               }
               if (parser->success) {
                 parse_Space(parser);
@@ -15621,7 +16677,7 @@ static bool parse_SimpleValue(Parser *parser) {
 
               { // Constant Capture
                 // A constant capture matches the empty string and produces all given values
-                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[28], 0, 0); // "length"
+                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[29], 0, 0); // "length"
               }
               if (parser->success) {
                 parse_Space(parser);
@@ -15667,7 +16723,7 @@ static bool parse_SimpleValue(Parser *parser) {
 
               { // Constant Capture
                 // A constant capture matches the empty string and produces all given values
-                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[2], 0, 0); // "bitnot"
+                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[3], 0, 0); // "bitnot"
               }
               if (parser->success) {
                 parse_Space(parser);
@@ -15713,7 +16769,7 @@ static bool parse_SimpleValue(Parser *parser) {
 
               { // Constant Capture
                 // A constant capture matches the empty string and produces all given values
-                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[30], 0, 0); // "not"
+                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[31], 0, 0); // "not"
               }
               if (parser->success) {
                 parse_Space(parser);
@@ -15863,7 +16919,7 @@ static bool parse_SingleString(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[42], 0, 0); // "string"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[43], 0, 0); // "string"
       }
       if (parser->success) {
         { // Capture
@@ -16070,7 +17126,7 @@ static bool parse_Slice(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[39], 0, 0); // "slice"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[40], 0, 0); // "slice"
       }
       if (parser->success) {
         { // Match single character "["
@@ -16095,7 +17151,7 @@ static bool parse_Slice(Parser *parser) {
               parser->success = true;
               { // Constant Capture
                 // A constant capture matches the empty string and produces all given values
-                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[52], 0, 0); // 1
+                pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[53], 0, 0); // 1
               }
             }
           }
@@ -16261,12 +17317,12 @@ static bool parse_SomeSpace(Parser *parser) {
   // Position-pure rule (no captures, labels, or other state): a
   // single-slot memo short-circuits the repeated calls that backtracking
   // alternatives make at the same position
-  if (parser->memo[5].pos == start + 1) {
-    if (parser->memo[5].endpos == (size_t)-1) {
+  if (parser->memo[9].pos == start + 1) {
+    if (parser->memo[9].endpos == (size_t)-1) {
       parser->success = false;
       return false;
     }
-    parser->pos = parser->memo[5].endpos;
+    parser->pos = parser->memo[9].endpos;
     parser->success = true;
     return true;
   }
@@ -16373,8 +17429,8 @@ static bool parse_SomeSpace(Parser *parser) {
     fprintf(stderr, "%*sRule %s failed at position %zu\n", (int)parser->depth, "", "SomeSpace", parser->pos);
   }
 #endif
-  parser->memo[5].pos = start + 1;
-  parser->memo[5].endpos = parser->success ? parser->pos : (size_t)-1;
+  parser->memo[9].pos = start + 1;
+  parser->memo[9].endpos = parser->success ? parser->pos : (size_t)-1;
 
   parser->depth -= 1;
   return parser->success;
@@ -16385,12 +17441,12 @@ static bool parse_Space(Parser *parser) {
   // Position-pure rule (no captures, labels, or other state): a
   // single-slot memo short-circuits the repeated calls that backtracking
   // alternatives make at the same position
-  if (parser->memo[6].pos == start + 1) {
-    if (parser->memo[6].endpos == (size_t)-1) {
+  if (parser->memo[10].pos == start + 1) {
+    if (parser->memo[10].endpos == (size_t)-1) {
       parser->success = false;
       return false;
     }
-    parser->pos = parser->memo[6].endpos;
+    parser->pos = parser->memo[10].endpos;
     parser->success = true;
     return true;
   }
@@ -16483,8 +17539,8 @@ static bool parse_Space(Parser *parser) {
     fprintf(stderr, "%*sRule %s failed at position %zu\n", (int)parser->depth, "", "Space", parser->pos);
   }
 #endif
-  parser->memo[6].pos = start + 1;
-  parser->memo[6].endpos = parser->success ? parser->pos : (size_t)-1;
+  parser->memo[10].pos = start + 1;
+  parser->memo[10].endpos = parser->success ? parser->pos : (size_t)-1;
 
   parser->depth -= 1;
   return parser->success;
@@ -16495,12 +17551,12 @@ static bool parse_SpaceBreak(Parser *parser) {
   // Position-pure rule (no captures, labels, or other state): a
   // single-slot memo short-circuits the repeated calls that backtracking
   // alternatives make at the same position
-  if (parser->memo[7].pos == start + 1) {
-    if (parser->memo[7].endpos == (size_t)-1) {
+  if (parser->memo[11].pos == start + 1) {
+    if (parser->memo[11].endpos == (size_t)-1) {
       parser->success = false;
       return false;
     }
-    parser->pos = parser->memo[7].endpos;
+    parser->pos = parser->memo[11].endpos;
     parser->success = true;
     return true;
   }
@@ -16536,8 +17592,8 @@ static bool parse_SpaceBreak(Parser *parser) {
     fprintf(stderr, "%*sRule %s failed at position %zu\n", (int)parser->depth, "", "SpaceBreak", parser->pos);
   }
 #endif
-  parser->memo[7].pos = start + 1;
-  parser->memo[7].endpos = parser->success ? parser->pos : (size_t)-1;
+  parser->memo[11].pos = start + 1;
+  parser->memo[11].endpos = parser->success ? parser->pos : (size_t)-1;
 
   parser->depth -= 1;
   return parser->success;
@@ -16897,7 +17953,7 @@ static bool parse_Statement(Parser *parser) {
 
                           { // Constant Capture
                             // A constant capture matches the empty string and produces all given values
-                            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[23], 0, 0); // "if"
+                            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[24], 0, 0); // "if"
                           }
                           if (parser->success) {
                             parse_Space(parser);
@@ -17104,7 +18160,7 @@ static bool parse_Statement(Parser *parser) {
 
                             { // Constant Capture
                               // A constant capture matches the empty string and produces all given values
-                              pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[46], 0, 0); // "unless"
+                              pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[47], 0, 0); // "unless"
                             }
                             if (parser->success) {
                               parse_Space(parser);
@@ -17206,7 +18262,7 @@ static bool parse_Statement(Parser *parser) {
 
                           { // Constant Capture
                             // A constant capture matches the empty string and produces all given values
-                            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[9], 0, 0); // "comprehension"
+                            pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[10], 0, 0); // "comprehension"
                           }
                           if (parser->success) {
                             parse_CompInner(parser);
@@ -17277,12 +18333,12 @@ static bool parse_Stop(Parser *parser) {
   // Position-pure rule (no captures, labels, or other state): a
   // single-slot memo short-circuits the repeated calls that backtracking
   // alternatives make at the same position
-  if (parser->memo[8].pos == start + 1) {
-    if (parser->memo[8].endpos == (size_t)-1) {
+  if (parser->memo[12].pos == start + 1) {
+    if (parser->memo[12].endpos == (size_t)-1) {
       parser->success = false;
       return false;
     }
-    parser->pos = parser->memo[8].endpos;
+    parser->pos = parser->memo[12].endpos;
     parser->success = true;
     return true;
   }
@@ -17348,8 +18404,8 @@ static bool parse_Stop(Parser *parser) {
     fprintf(stderr, "%*sRule %s failed at position %zu\n", (int)parser->depth, "", "Stop", parser->pos);
   }
 #endif
-  parser->memo[8].pos = start + 1;
-  parser->memo[8].endpos = parser->success ? parser->pos : (size_t)-1;
+  parser->memo[12].pos = start + 1;
+  parser->memo[12].endpos = parser->success ? parser->pos : (size_t)-1;
 
   parser->depth -= 1;
   return parser->success;
@@ -17440,7 +18496,7 @@ static bool parse_Switch(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[43], 0, 0); // "switch"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[44], 0, 0); // "switch"
       }
       if (parser->success) {
         parse_Space(parser);
@@ -17714,32 +18770,7 @@ static bool parse_SwitchBlock(Parser *parser) {
                   { // Sequence with 2 patterns
                     REMEMBER_POSITION(parser, pos);
 
-                    { // At least 1 repetitions
-                      REMEMBER_INPUT_POSITION(parser, pos);
-                      size_t rep_count = 0;
-
-                      while (true) {
-                        parse_Break(parser);
-
-                        if (!parser->success) {
-                          break;
-                        }
-
-                        rep_count += 1;
-                      }
-
-                      // Don't recover if labeled failure was thrown
-                      if (parser->throw_label) {
-                        // Keep failure state, propagate labeled failure
-                      } else if (rep_count >= 1) {
-                        parser->success = true;
-                      } else {
-                        RESTORE_INPUT_POSITION(parser, pos);
-#ifdef PGEN_ERRORS
-                        sprintf(parser->error_message, "Expected 1 repetitions at position %zu", parser->pos);
-#endif
-                      }
-                    }
+                    parse_CaseSep(parser);
                     if (parser->success) {
                       parse_SwitchCase(parser);
                       if (!parser->success) {
@@ -17767,32 +18798,7 @@ static bool parse_SwitchBlock(Parser *parser) {
                       { // Sequence with 2 patterns
                         REMEMBER_POSITION(parser, pos);
 
-                        { // At least 1 repetitions
-                          REMEMBER_INPUT_POSITION(parser, pos);
-                          size_t rep_count = 0;
-
-                          while (true) {
-                            parse_Break(parser);
-
-                            if (!parser->success) {
-                              break;
-                            }
-
-                            rep_count += 1;
-                          }
-
-                          // Don't recover if labeled failure was thrown
-                          if (parser->throw_label) {
-                            // Keep failure state, propagate labeled failure
-                          } else if (rep_count >= 1) {
-                            parser->success = true;
-                          } else {
-                            RESTORE_INPUT_POSITION(parser, pos);
-#ifdef PGEN_ERRORS
-                            sprintf(parser->error_message, "Expected 1 repetitions at position %zu", parser->pos);
-#endif
-                          }
-                        }
+                        parse_CaseSep(parser);
                         if (parser->success) {
                           parse_SwitchElse(parser);
                           if (!parser->success) {
@@ -17872,7 +18878,7 @@ static bool parse_SwitchCase(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[5], 0, 0); // "case"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[6], 0, 0); // "case"
       }
       if (parser->success) {
         parse_Space(parser);
@@ -18111,7 +19117,7 @@ static bool parse_SwitchElse(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[15], 0, 0); // "else"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[16], 0, 0); // "else"
       }
       if (parser->success) {
         parse_Space(parser);
@@ -18231,12 +19237,12 @@ static bool parse_TableBlock(Parser *parser) {
   { // Capture Table
     size_t ct_cap_start = parser->cap_len;
     pgen_cap_push(parser, PGEN_CAP_TBL_OPEN, 0, 0, 0);
-    { // Sequence with 5 patterns
+    { // Sequence with 3 patterns
       REMEMBER_POSITION(parser, pos);
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[44], 0, 0); // "table"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[45], 0, 0); // "table"
       }
       if (parser->success) {
         { // At least 1 repetitions
@@ -18244,7 +19250,7 @@ static bool parse_TableBlock(Parser *parser) {
           size_t rep_count = 0;
 
           while (true) {
-            parse_SpaceBreak(parser);
+            parse_EmptyLineNA(parser);
 
             if (!parser->success) {
               break;
@@ -18266,13 +19272,7 @@ static bool parse_TableBlock(Parser *parser) {
           }
         }
         if (parser->success) {
-          parse_Advance(parser);
-          if (parser->success) {
-            parse_TableBlockInner(parser);
-            if (parser->success) {
-              parse_PopIndent(parser);
-            }
-          }
+          parse_TableBlockRest(parser);
         }
         if (!parser->success) {
           RESTORE_POSITION(parser, pos);
@@ -18317,22 +19317,22 @@ static bool parse_TableBlockInner(Parser *parser) {
   { // Capture Table
     size_t ct_cap_start = parser->cap_len;
     pgen_cap_push(parser, PGEN_CAP_TBL_OPEN, 0, 0, 0);
-    { // Sequence with 2 patterns
+    { // Sequence with 3 patterns
       REMEMBER_POSITION(parser, pos);
 
-      parse_KeyValueLine(parser);
-      if (parser->success) {
-        { // Zero or more repetitions
-          while (true) {
-            { // Sequence with 2 patterns
-              REMEMBER_POSITION(parser, pos);
+      { // Zero or more repetitions
+        while (true) {
+          { // Sequence with 2 patterns
+            REMEMBER_POSITION(parser, pos);
 
+            parse_AnnotationComment(parser);
+            if (parser->success) {
               { // At least 1 repetitions
                 REMEMBER_INPUT_POSITION(parser, pos);
                 size_t rep_count = 0;
 
                 while (true) {
-                  parse_SpaceBreak(parser);
+                  parse_EmptyLineNA(parser);
 
                   if (!parser->success) {
                     break;
@@ -18353,20 +19353,69 @@ static bool parse_TableBlockInner(Parser *parser) {
 #endif
                 }
               }
-              if (parser->success) {
-                parse_KeyValueLine(parser);
-                if (!parser->success) {
-                  RESTORE_POSITION(parser, pos);
-                }
+              if (!parser->success) {
+                RESTORE_POSITION(parser, pos);
               }
             }
-            if (!parser->success) {
-              break;
-            }
           }
-          // Only recover from ordinary failure, not labeled failure from T()
-          if (!parser->throw_label) {
-            parser->success = true;
+          if (!parser->success) {
+            break;
+          }
+        }
+        // Only recover from ordinary failure, not labeled failure from T()
+        if (!parser->throw_label) {
+          parser->success = true;
+        }
+      }
+      if (parser->success) {
+        parse_KeyValueLine(parser);
+        if (parser->success) {
+          { // Zero or more repetitions
+            while (true) {
+              { // Sequence with 2 patterns
+                REMEMBER_POSITION(parser, pos);
+
+                { // At least 1 repetitions
+                  REMEMBER_INPUT_POSITION(parser, pos);
+                  size_t rep_count = 0;
+
+                  while (true) {
+                    parse_EmptyLineNA(parser);
+
+                    if (!parser->success) {
+                      break;
+                    }
+
+                    rep_count += 1;
+                  }
+
+                  // Don't recover if labeled failure was thrown
+                  if (parser->throw_label) {
+                    // Keep failure state, propagate labeled failure
+                  } else if (rep_count >= 1) {
+                    parser->success = true;
+                  } else {
+                    RESTORE_INPUT_POSITION(parser, pos);
+#ifdef PGEN_ERRORS
+                    sprintf(parser->error_message, "Expected 1 repetitions at position %zu", parser->pos);
+#endif
+                  }
+                }
+                if (parser->success) {
+                  parse_TableBlockLine(parser);
+                  if (!parser->success) {
+                    RESTORE_POSITION(parser, pos);
+                  }
+                }
+              }
+              if (!parser->success) {
+                break;
+              }
+            }
+            // Only recover from ordinary failure, not labeled failure from T()
+            if (!parser->throw_label) {
+              parser->success = true;
+            }
           }
         }
         if (!parser->success) {
@@ -18388,6 +19437,115 @@ static bool parse_TableBlockInner(Parser *parser) {
     fprintf(stderr, "%*s\t%.*s\n", (int)parser->depth, "", (int)(parser->pos - start), parser->input + start);
   } else {
     fprintf(stderr, "%*sRule %s failed at position %zu\n", (int)parser->depth, "", "TableBlockInner", parser->pos);
+  }
+#endif
+
+  parser->depth -= 1;
+  return parser->success;
+}
+
+static bool parse_TableBlockLine(Parser *parser) {
+  size_t start = parser->pos;
+
+  parser->depth += 1;
+  if (parser->depth > PGEN_MAX_DEPTH) {
+    // A Lua error (rather than a match failure) so the overflow can't be
+    // silently converted into a successful parse by a predicate or choice
+    luaL_error(parser->L, "pgen: max recursion depth (%d) exceeded at position %d", (int)PGEN_MAX_DEPTH, (int)(parser->pos + 1));
+  }
+
+#ifdef PGEN_DEBUG
+  fprintf(stderr, "%*sEntering rule %s at position %zu\n", (int)parser->depth, "", "TableBlockLine", start);
+#endif
+
+  { // Choice
+    parse_AnnotationComment(parser);
+
+    if (!parser->success && !parser->throw_label) {
+      parser->success = true;
+      parse_KeyValueLine(parser);
+    }
+  }
+
+#ifdef PGEN_DEBUG
+  if (parser->success) {
+    fprintf(stderr, "%*sRule %s matched range: %zu-%zu\n", (int)parser->depth, "", "TableBlockLine", start, parser->pos);
+    fprintf(stderr, "%*s\t%.*s\n", (int)parser->depth, "", (int)(parser->pos - start), parser->input + start);
+  } else {
+    fprintf(stderr, "%*sRule %s failed at position %zu\n", (int)parser->depth, "", "TableBlockLine", parser->pos);
+  }
+#endif
+
+  parser->depth -= 1;
+  return parser->success;
+}
+
+static bool parse_TableBlockRest(Parser *parser) {
+  size_t start = parser->pos;
+
+  parser->depth += 1;
+  if (parser->depth > PGEN_MAX_DEPTH) {
+    // A Lua error (rather than a match failure) so the overflow can't be
+    // silently converted into a successful parse by a predicate or choice
+    luaL_error(parser->L, "pgen: max recursion depth (%d) exceeded at position %d", (int)PGEN_MAX_DEPTH, (int)(parser->pos + 1));
+  }
+
+#ifdef PGEN_DEBUG
+  fprintf(stderr, "%*sEntering rule %s at position %zu\n", (int)parser->depth, "", "TableBlockRest", start);
+#endif
+
+  {   // Choice
+    { // Sequence with 3 patterns
+      REMEMBER_POSITION(parser, pos);
+
+      parse_Advance(parser);
+      if (parser->success) {
+        parse_TableBlockInner(parser);
+        if (parser->success) {
+          parse_PopIndent(parser);
+        }
+        if (!parser->success) {
+          RESTORE_POSITION(parser, pos);
+        }
+      }
+    }
+
+    if (!parser->success && !parser->throw_label) {
+      parser->success = true;
+      { // Sequence with 3 patterns
+        REMEMBER_POSITION(parser, pos);
+
+        parse_AnnotationDiscard(parser);
+        if (parser->success) {
+          { // Zero or more repetitions
+            while (true) {
+              parse_EmptyLineNA(parser);
+              if (!parser->success) {
+                break;
+              }
+            }
+            // Only recover from ordinary failure, not labeled failure from T()
+            if (!parser->throw_label) {
+              parser->success = true;
+            }
+          }
+          if (parser->success) {
+            parse_TableBlockRest(parser);
+          }
+          if (!parser->success) {
+            RESTORE_POSITION(parser, pos);
+          }
+        }
+      }
+    }
+  }
+
+#ifdef PGEN_DEBUG
+  if (parser->success) {
+    fprintf(stderr, "%*sRule %s matched range: %zu-%zu\n", (int)parser->depth, "", "TableBlockRest", start, parser->pos);
+    fprintf(stderr, "%*s\t%.*s\n", (int)parser->depth, "", (int)(parser->pos - start), parser->input + start);
+  } else {
+    fprintf(stderr, "%*sRule %s failed at position %zu\n", (int)parser->depth, "", "TableBlockRest", parser->pos);
   }
 #endif
 
@@ -18417,7 +19575,7 @@ static bool parse_TableLit(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[44], 0, 0); // "table"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[45], 0, 0); // "table"
       }
       if (parser->success) {
         parse_Space(parser);
@@ -18918,7 +20076,7 @@ static bool parse_TblComprehension(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[45], 0, 0); // "tblcomprehension"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[46], 0, 0); // "tblcomprehension"
       }
       if (parser->success) {
         parse_Space(parser);
@@ -19078,7 +20236,7 @@ static bool parse_Unless(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[46], 0, 0); // "unless"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[47], 0, 0); // "unless"
       }
       if (parser->success) {
         parse_Space(parser);
@@ -19345,7 +20503,7 @@ static bool parse_Update(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[48], 0, 0); // "update"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[49], 0, 0); // "update"
       }
       if (parser->success) {
         parse_Space(parser);
@@ -20003,7 +21161,7 @@ static bool parse_Value(Parser *parser) {
 
                 { // Constant Capture
                   // A constant capture matches the empty string and produces all given values
-                  pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[44], 0, 0); // "table"
+                  pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[45], 0, 0); // "table"
                 }
                 if (parser->success) {
                   { // Capture Table
@@ -20066,7 +21224,7 @@ static bool parse_Value(Parser *parser) {
 
                     { // Constant Capture
                       // A constant capture matches the empty string and produces all given values
-                      pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[44], 0, 0); // "table"
+                      pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[45], 0, 0); // "table"
                     }
                     if (parser->success) {
                       { // Capture Table
@@ -20213,7 +21371,7 @@ static bool parse_While(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[50], 0, 0); // "while"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[51], 0, 0); // "while"
       }
       if (parser->success) {
         parse_Space(parser);
@@ -20441,12 +21599,12 @@ static bool parse_White(Parser *parser) {
   // Position-pure rule (no captures, labels, or other state): a
   // single-slot memo short-circuits the repeated calls that backtracking
   // alternatives make at the same position
-  if (parser->memo[9].pos == start + 1) {
-    if (parser->memo[9].endpos == (size_t)-1) {
+  if (parser->memo[13].pos == start + 1) {
+    if (parser->memo[13].endpos == (size_t)-1) {
       parser->success = false;
       return false;
     }
-    parser->pos = parser->memo[9].endpos;
+    parser->pos = parser->memo[13].endpos;
     parser->success = true;
     return true;
   }
@@ -20510,8 +21668,8 @@ static bool parse_White(Parser *parser) {
     fprintf(stderr, "%*sRule %s failed at position %zu\n", (int)parser->depth, "", "White", parser->pos);
   }
 #endif
-  parser->memo[9].pos = start + 1;
-  parser->memo[9].endpos = parser->success ? parser->pos : (size_t)-1;
+  parser->memo[13].pos = start + 1;
+  parser->memo[13].endpos = parser->success ? parser->pos : (size_t)-1;
 
   parser->depth -= 1;
   return parser->success;
@@ -20539,7 +21697,7 @@ static bool parse_With(Parser *parser) {
 
       { // Constant Capture
         // A constant capture matches the empty string and produces all given values
-        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[51], 0, 0); // "with"
+        pgen_cap_push(parser, PGEN_CAP_CONST, __const_refs[52], 0, 0); // "with"
       }
       if (parser->success) {
         parse_Space(parser);

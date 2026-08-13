@@ -231,6 +231,10 @@ exp_precedence = (node) ->
       if items
         count = #items
         for i, tuple in ipairs items
+          if ntype(tuple) == "annotation"
+            \add tuple[2], tuple[-1]
+            continue
+
           line = format_line tuple
           line\append table_delim unless count == i
           \add line

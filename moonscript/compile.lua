@@ -114,9 +114,15 @@ do
             insert(buffer, indent)
           end
           insert(buffer, l)
-          if "string" == type(self[i + 1]) then
-            if l:sub(-1) ~= ',' and l:sub(-3) ~= 'end' and self[i + 1]:sub(1, 1) == "(" then
-              insert(buffer, ";")
+          if not (l:sub(1, 3) == "---") then
+            local k = i + 1
+            while "string" == type(self[k]) and self[k]:sub(1, 3) == "---" do
+              k = k + 1
+            end
+            if "string" == type(self[k]) then
+              if l:sub(-1) ~= ',' and l:sub(-3) ~= 'end' and self[k]:sub(1, 1) == "(" then
+                insert(buffer, ";")
+              end
             end
           end
           insert(buffer, "\n")
@@ -146,22 +152,38 @@ do
         local _exp_0 = t
         if "string" == _exp_0 then
           local target = posmap[i] and line_for_pos(posmap[i])
-          local prev = self[i - 1]
+          local k = i - 1
+          while "string" == type(self[k]) and self[k]:sub(1, 3) == "---" do
+            k = k - 1
+          end
+          local prev = self[k]
           local ambiguous = l:sub(1, 1) == "(" and "string" == type(prev) and prev:sub(-1) ~= ',' and prev:sub(-3) ~= 'end'
           if target and target > state.line then
-            if ambiguous then
+            if ambiguous and not state.last_comment then
               insert(buffer, ";")
             end
             insert(buffer, ("\n"):rep(target - state.line))
             if indent then
               insert(buffer, indent)
             end
+            if ambiguous and state.last_comment then
+              insert(buffer, ";")
+            end
             state.line = target
           elseif state.started then
-            insert(buffer, ambiguous and "; " or " ")
+            if state.last_comment then
+              insert(buffer, "\n")
+              if indent then
+                insert(buffer, indent)
+              end
+              state.line = state.line + 1
+            else
+              insert(buffer, ambiguous and "; " or " ")
+            end
           end
           insert(buffer, l)
           state.started = true
+          state.last_comment = l:sub(1, 3) == "---"
           if target then
             local _update_0 = state.line
             state.posmap[_update_0] = state.posmap[_update_0] or posmap[i]

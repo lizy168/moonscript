@@ -85,6 +85,39 @@ Comments are not written to the output.
 -- I am a comment
 ```
 
+### Annotation Comments
+
+A comment-only line starting with exactly three dashes is an annotation
+comment. Unlike regular comments, annotation comments are written to the
+compiled output, directly above the statement, class member, or table field
+that follows them. This makes
+[LuaLS annotations](https://luals.github.io/wiki/annotations/) written in
+MoonScript visible to the Lua language server in the generated code:
+
+```moon
+---@param a number
+---@return number
+double = (a) -> a * 2
+
+class Point
+  ---@type number
+  x: 0
+
+  ---@param dx number
+  ---@param dy number
+  move: (dx, dy) =>
+    @x += dx
+    @y += dy
+```
+
+Four or more dashes is a regular comment and is not passed through, so `----`
+divider lines stay out of the output. Annotation comments in positions with
+no corresponding output, like directly above an `else` or a `when` clause,
+are dropped. A blank line between an annotation comment and the following
+statement is preserved in the source but may not survive compilation, so
+place annotations directly above the code they document. The inline
+`--[[@as]]` form is not supported.
+
 ## Literals & Operators
 
 All of the primitive literals in Lua can be used. This applies to numbers,

@@ -125,14 +125,30 @@ return function(self, node, ret, parent_assign)
   local statements = { }
   local properties = { }
   local hoisted_locals = { }
+  local pending_annotations = { }
+  local flush_annotations
+  flush_annotations = function(into)
+    if not (pending_annotations[1]) then
+      return 
+    end
+    for _index_0 = 1, #pending_annotations do
+      local a = pending_annotations[_index_0]
+      insert(into, a)
+    end
+    pending_annotations = { }
+  end
   for _index_0 = 1, #body do
     local item = body[_index_0]
     local _exp_0 = item[1]
-    if "stm" == _exp_0 then
+    if "annotation" == _exp_0 then
+      insert(pending_annotations, item)
+    elseif "stm" == _exp_0 then
       local stm = item[2]
       if ntype(stm) == "declare_with_shadows" then
+        pending_annotations = { }
         insert(hoisted_locals, stm)
       else
+        flush_annotations(statements)
         insert(statements, stm)
       end
     elseif "props" == _exp_0 then
@@ -145,44 +161,59 @@ return function(self, node, ret, parent_assign)
             "key_literal",
             k[2]
           })
+          flush_annotations(statements)
           insert(statements, build.assign_one(k, v))
         else
+          flush_annotations(properties)
           insert(properties, tuple)
         end
       end
     end
   end
-  local constructor
+  flush_annotations(properties)
+  local constructor, constructor_annotations
   do
-    local _accum_0 = { }
-    local _len_0 = 1
+    local pending = { }
+    local filtered = { }
     for _index_0 = 1, #properties do
       local _continue_0 = false
       repeat
         local tuple = properties[_index_0]
-        local key = tuple[1]
-        local _value_0
-        if key[1] == "key_literal" and key[2] == CONSTRUCTOR_NAME then
-          constructor = tuple[2]
+        if ntype(tuple) == "annotation" then
+          insert(pending, tuple)
           _continue_0 = true
           break
+        end
+        local key = tuple[1]
+        if key[1] == "key_literal" and key[2] == CONSTRUCTOR_NAME then
+          constructor = tuple[2]
+          if pending[1] then
+            constructor_annotations = pending
+          end
         else
+          for _index_1 = 1, #pending do
+            local a = pending[_index_1]
+            insert(filtered, a)
+          end
           local val
           key, val = tuple[1], tuple[2]
-          _value_0 = {
+          insert(filtered, {
             key,
             super_scope(val, cls_instance_super, key)
-          }
+          })
         end
-        _accum_0[_len_0] = _value_0
-        _len_0 = _len_0 + 1
+        pending = { }
         _continue_0 = true
       until true
       if not _continue_0 then
         break
       end
     end
-    properties = _accum_0
+    for _index_0 = 1, #pending do
+      local a = pending[_index_0]
+      insert(filtered, a)
+    end
+    properties = filtered
   end
   if not (constructor) then
     if parent_val then
@@ -264,6 +295,11 @@ return function(self, node, ret, parent_assign)
       parent_cls_name
     } or nil
   })
+  if constructor_annotations then
+    for i, a in ipairs(constructor_annotations) do
+      insert(cls[2], i, a)
+    end
+  end
   local class_index
   if parent_val then
     local class_lookup = build["if"]({

@@ -1,5 +1,32 @@
 # MoonScript dev
 
+## Annotation comments pass through to output
+
+A comment-only line starting with exactly three dashes (the
+[LuaLS annotation](https://luals.github.io/wiki/annotations/) syntax) is now
+kept in the compiled output, emitted directly above the statement, class
+member, or table field that follows it:
+
+```moonscript
+---@param a number
+---@return number
+double = (a) -> a * 2
+```
+
+```lua
+---@param a number
+---@return number
+local double
+double = function(a)
+  return a * 2
+end
+```
+
+Annotations appear in the syntax tree as `{"annotation", text}` nodes. Four
+or more dashes is a regular comment and is not passed through. See the
+[reference manual](https://moonscript.org/reference/#the-language/comments)
+for details.
+
 ## New parser
 
 The LPeg parser has been replaced. The grammar is defined in

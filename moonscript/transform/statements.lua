@@ -37,7 +37,7 @@ last_stm = function(stms)
   local last_exp_id = 0
   for i = #stms, 1, -1 do
     local stm = stms[i]
-    if stm and mtype(stm) ~= Run then
+    if stm and mtype(stm) ~= Run and ntype(stm) ~= "annotation" then
       if ntype(stm) == "group" then
         return last_stm(stm[2])
       end

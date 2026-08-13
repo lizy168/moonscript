@@ -90,6 +90,10 @@ return {
   SpaceBreak = V("Space") * V("Break"),
   EmptyLine = V("SpaceBreak"),
   Shebang = P("#!") * (P(1) - V("Stop")) ^ 0,
+  AnnotationPrefix = P("---") * -P("-"),
+  AnnotationComment = S(" \t") ^ 0 * pos(mark("annotation", C(V("AnnotationPrefix") * (P(1) - S("\r\n")) ^ 0))) * L(V("Stop")),
+  AnnotationDiscard = S(" \t") ^ 0 * V("AnnotationPrefix") * (P(1) - S("\r\n")) ^ 0 * V("Break"),
+  EmptyLineNA = S(" \t") ^ 0 * -V("AnnotationPrefix") * V("Comment") ^ -1 * V("Break"),
   NameRaw = C(R("az", "AZ", "__") * AlphaNum ^ 0),
   Name = V("Space") * -Keyword * V("NameRaw"),
   Num = V("Space") * Ct(Cc("number") * C(P("0x") * R("09", "af", "AF") ^ 1 * (S("uU") ^ -1 * S("lL") ^ 2) ^ -1 + R("09") ^ 1 * (S("uU") ^ -1 * S("lL") ^ 2) + (R("09") ^ 1 * (P(".") * R("09") ^ 1) ^ -1 + P(".") * R("09") ^ 1) * (S("eE") * P("-") ^ -1 * R("09") ^ 1) ^ -1)),
@@ -99,14 +103,16 @@ return {
   File = V("Shebang") ^ -1 * (V("Block") + Ct(P(""))),
   Block = Ct(V("Line") * (V("Break") ^ 1 * V("Line")) ^ 0),
   CheckIndent = ind.check,
-  Line = V("CheckIndent") * V("Statement") + V("Space") * L(V("Stop")),
+  AnnotationIndent = ind.check + ind.advance * ind.pop,
+  Line = V("AnnotationIndent") * V("AnnotationComment") + V("CheckIndent") * V("Statement") + S(" \t") ^ 0 * -V("AnnotationPrefix") * V("Comment") ^ -1 * L(V("Stop")),
   Statement = Cfn(pos(V("Import") + V("While") + V("With") + V("For") + V("ForEach") + V("Switch") + V("Return") + V("Local") + V("Export") + V("BreakLoop") + Cfn(Ct(V("ExpList")) * (V("Update") + V("Assign")) ^ -1, assign_transform)) * V("Space") * ((mark("if", key("if") * V("Exp") * (key("else") * V("Exp")) ^ -1 * V("Space")) + mark("unless", key("unless") * V("Exp")) + mark("comprehension", V("CompInner"))) * V("Space")) ^ -1, [[return function(stm, dec)
       if dec then
         return {"decorated", stm, dec}
       end
       return stm
     end]]),
-  Body = V("Space") * V("Break") * V("EmptyLine") ^ 0 * V("InBlock") + Ct(V("Statement")),
+  Body = V("Space") * V("Break") * V("BodyBlock") + Ct(V("Statement")),
+  BodyBlock = V("EmptyLineNA") ^ 0 * (V("InBlock") + V("AnnotationDiscard") * V("BodyBlock")),
   Advance = ind.advance,
   PushIndent = ind.push,
   PreventIndent = ind.prevent,
@@ -121,7 +127,8 @@ return {
   WithExp = Cfn(Ct(V("ExpList")) * V("Assign") ^ -1, assign_transform),
   With = mark("with", key("with") * DisableDo * V("WithExp") * PopDo * key("do") ^ -1 * V("Body")),
   Switch = mark("switch", key("switch") * DisableDo * V("Exp") * PopDo * key("do") ^ -1 * V("Space") * V("Break") * V("SwitchBlock")),
-  SwitchBlock = V("EmptyLine") ^ 0 * V("Advance") * Ct(V("SwitchCase") * (V("Break") ^ 1 * V("SwitchCase")) ^ 0 * (V("Break") ^ 1 * V("SwitchElse")) ^ -1) * V("PopIndent"),
+  SwitchBlock = V("EmptyLine") ^ 0 * V("Advance") * Ct(V("SwitchCase") * (V("CaseSep") * V("SwitchCase")) ^ 0 * (V("CaseSep") * V("SwitchElse")) ^ -1) * V("PopIndent"),
+  CaseSep = V("Break") ^ 1 * V("EmptyLine") ^ 0,
   SwitchCase = mark("case", key("when") * Ct(V("ExpList")) * key("then") ^ -1 * V("Body")),
   SwitchElse = mark("else", key("else") * V("Body")),
   IfCond = Cfn(V("Exp") * V("Assign") ^ -1, [[    local tree = require("moonscript.parse.tree")
@@ -193,11 +200,14 @@ return {
   TableLit = mark("table", sym("{") * Ct(V("TableValueList") ^ -1 * sym(",") ^ -1 * (V("SpaceBreak") * V("TableLitLine") * (sym(",") ^ -1 * V("SpaceBreak") * V("TableLitLine")) ^ 0 * sym(",") ^ -1) ^ -1) * V("White") * sym("}")),
   TableValueList = V("TableValue") * (sym(",") * V("TableValue")) ^ 0,
   TableLitLine = V("PushIndent") * V("TableValueList") * V("PopIndent") + V("Space"),
-  TableBlockInner = Ct(V("KeyValueLine") * (V("SpaceBreak") ^ 1 * V("KeyValueLine")) ^ 0),
-  TableBlock = mark("table", V("SpaceBreak") ^ 1 * V("Advance") * V("TableBlockInner") * V("PopIndent")),
+  TableBlockInner = Ct((V("AnnotationComment") * V("EmptyLineNA") ^ 1) ^ 0 * V("KeyValueLine") * (V("EmptyLineNA") ^ 1 * V("TableBlockLine")) ^ 0),
+  TableBlockLine = V("AnnotationComment") + V("KeyValueLine"),
+  TableBlock = mark("table", V("EmptyLineNA") ^ 1 * V("TableBlockRest")),
+  TableBlockRest = V("Advance") * V("TableBlockInner") * V("PopIndent") + V("AnnotationDiscard") * V("EmptyLineNA") ^ 0 * V("TableBlockRest"),
   ClassDecl = mark("class", key("class") * -P(":") * (V("Assignable") + Cc(nil)) * (key("extends") * V("PreventIndent") * V("Exp") * V("PopIndent") + C(P(""))) ^ -1 * (V("ClassBlock") + Ct(P("")))),
-  ClassBlock = V("SpaceBreak") ^ 1 * V("Advance") * Ct(V("ClassLine") * (V("SpaceBreak") ^ 1 * V("ClassLine")) ^ 0) * V("PopIndent"),
-  ClassLine = V("CheckIndent") * ((mark("props", V("KeyValueList")) + mark("stm", V("Statement")) + mark("stm", V("Exp"))) * sym(",") ^ -1),
+  ClassBlock = V("EmptyLineNA") ^ 1 * V("ClassBlockRest"),
+  ClassBlockRest = V("Advance") * Ct(V("ClassLine") * (V("EmptyLineNA") ^ 1 * V("ClassLine")) ^ 0) * V("PopIndent") + V("AnnotationDiscard") * V("EmptyLineNA") ^ 0 * V("ClassBlockRest"),
+  ClassLine = V("AnnotationComment") + V("CheckIndent") * ((mark("props", V("KeyValueList")) + mark("stm", V("Statement")) + mark("stm", V("Exp"))) * sym(",") ^ -1),
   Export = mark("export", key("export") * (Cc("class") * V("ClassDecl") + op("*") + op("^") + Ct(V("NameList")) * (sym("=") * Ct(V("ExpListLow"))) ^ -1)),
   KeyValue = Cfn(sym(":") * -V("SomeSpace") * V("Name") * Cp(), [[return function(name, p)
       return {

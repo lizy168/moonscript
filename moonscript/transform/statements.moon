@@ -22,7 +22,9 @@ last_stm = (stms) ->
   last_exp_id = 0
   for i = #stms, 1, -1
     stm = stms[i]
-    if stm and mtype(stm) != Run
+    -- annotation comments don't count as the last statement or they would
+    -- steal the implicit return from the statement before them
+    if stm and mtype(stm) != Run and ntype(stm) != "annotation"
       if ntype(stm) == "group"
         return last_stm stm[2]
 

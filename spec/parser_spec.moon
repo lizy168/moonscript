@@ -76,6 +76,65 @@ describe "moonscript.parse", ->
   it "parses a comment-only file", ->
     assert.same {}, parse.string "-- nothing here"
 
+  it "parses an annotation comment into a node", ->
+    assert.same {
+      {"annotation", "---@type number", [-1]: 1}
+      {"assign"
+        {{"ref", "x", [-1]: 17}}
+        {{"number", "5", [-1]: 20}}
+        [-1]: 17}
+    }, parse.string "---@type number\nx = 5"
+
+  it "parses consecutive annotation lines as separate nodes", ->
+    assert.same {
+      {"annotation", "---one", [-1]: 1}
+      {"annotation", "---two", [-1]: 8}
+      {"assign"
+        {{"ref", "x", [-1]: 15}}
+        {{"number", "1", [-1]: 18}}
+        [-1]: 15}
+    }, parse.string "---one\n---two\nx = 1"
+
+  it "parses an annotation-only file", ->
+    assert.same {
+      {"annotation", "---@meta", [-1]: 1}
+    }, parse.string "---@meta"
+
+  it "does not parse four or more dashes as an annotation", ->
+    assert.same {
+      {"assign"
+        {{"ref", "x", [-1]: 16}}
+        {{"number", "5", [-1]: 19}}
+        [-1]: 16}
+    }, parse.string "---- separator\nx = 5"
+
+  it "parses an annotation at the start of an indented body", ->
+    assert.same {
+      {"if", {"ref", "x", [-1]: 3}, {
+        {"annotation", "---@a", [-1]: 8}
+        {"chain", {"ref", "y", [-1]: 16}, {"call", {}}, [-1]: 16}
+      }, [-1]: 1}
+    }, parse.string "if x\n  ---@a\n  y!"
+
+  it "parses an annotation inside a class body", ->
+    assert.same {
+      {"class", "X", "", {
+        {"annotation", "---@p", [-1]: 11}
+        {"props", {{"key_literal", "m"}, {"ref", "f", [-1]: 21}}}
+      }, [-1]: 1}
+    }, parse.string "class X\n  ---@p\n  m: f"
+
+  it "parses an annotation inside a table block", ->
+    assert.same {
+      {"assign"
+        {{"ref", "t", [-1]: 1}}
+        {{"table", {
+          {"annotation", "---@t", [-1]: 7}
+          {{"key_literal", "age"}, {"number", "10", [-1]: 19}}
+        }}}
+        [-1]: 1}
+    }, parse.string "t =\n  ---@t\n  age: 10"
+
   it "fails on unbalanced parens", ->
     tree, err = parse.string "x = (a + b"
     assert.is_nil tree

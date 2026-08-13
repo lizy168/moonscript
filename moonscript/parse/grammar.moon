@@ -84,6 +84,17 @@ key = (chars) ->
   EmptyLine: V"SpaceBreak"
   Shebang: P"#!" * (P(1) - V"Stop")^0
 
+  -- A comment-only line starting with exactly three dashes (the LuaLS
+  -- annotation syntax) becomes an {"annotation", text} node so the compiler
+  -- can re-emit it. Four or more dashes is a plain comment, matching LuaLS.
+  AnnotationPrefix: P"---" * -P"-"
+  AnnotationComment: S(" \t")^0 *
+    pos(mark("annotation", C(V"AnnotationPrefix" * (P(1) - S"\r\n")^0))) * L(V"Stop")
+  -- consumes an annotation line in positions where a node can't be placed
+  AnnotationDiscard: S(" \t")^0 * V"AnnotationPrefix" * (P(1) - S"\r\n")^0 * V"Break"
+  -- EmptyLine that leaves annotation lines for AnnotationComment
+  EmptyLineNA: S(" \t")^0 * -V"AnnotationPrefix" * V("Comment")^-1 * V"Break"
+
   NameRaw: C(R("az", "AZ", "__") * AlphaNum^0)
   Name: V"Space" * -Keyword * V"NameRaw"
 
@@ -103,7 +114,13 @@ key = (chars) ->
   File: V("Shebang")^-1 * (V"Block" + Ct(P""))
   Block: Ct(V"Line" * (V("Break")^1 * V"Line")^0)
   CheckIndent: ind.check
-  Line: V"CheckIndent" * V"Statement" + V"Space" * L(V"Stop")
+  -- annotation lines at or beyond the block's indent belong to this block.
+  -- dedented ones fail every alternative (the blank line alternative rejects
+  -- them too) so the block ends and an enclosing block claims them
+  AnnotationIndent: ind.check + ind.advance * ind.pop
+  Line: V"AnnotationIndent" * V"AnnotationComment" +
+    V"CheckIndent" * V"Statement" +
+    S(" \t")^0 * -V"AnnotationPrefix" * V("Comment")^-1 * L(V"Stop")
 
   Statement: Cfn(
     pos(
@@ -121,7 +138,11 @@ key = (chars) ->
       return stm
     end]])
 
-  Body: V"Space" * V"Break" * V("EmptyLine")^0 * V"InBlock" + Ct(V"Statement")
+  -- annotation lines are left for the block's Line rule when they can start
+  -- the block (Advance fires on them); ones that can't are discarded so
+  -- existing code keeps parsing
+  Body: V"Space" * V"Break" * V"BodyBlock" + Ct(V"Statement")
+  BodyBlock: V("EmptyLineNA")^0 * (V"InBlock" + V"AnnotationDiscard" * V"BodyBlock")
 
   Advance: ind.advance
   PushIndent: ind.push
@@ -151,9 +172,12 @@ key = (chars) ->
   Switch: mark("switch",
     key("switch") * DisableDo * V"Exp" * PopDo * key("do")^-1 *
     V"Space" * V"Break" * V"SwitchBlock")
+  -- case bodies no longer absorb dedented comment lines (see Line), the
+  -- separator consumes them so a comment between cases keeps parsing
   SwitchBlock: V("EmptyLine")^0 * V"Advance" *
-    Ct(V"SwitchCase" * (V("Break")^1 * V"SwitchCase")^0 *
-      (V("Break")^1 * V"SwitchElse")^-1) * V"PopIndent"
+    Ct(V"SwitchCase" * (V"CaseSep" * V"SwitchCase")^0 *
+      (V"CaseSep" * V"SwitchElse")^-1) * V"PopIndent"
+  CaseSep: V("Break")^1 * V("EmptyLine")^0
   SwitchCase: mark("case",
     key("when") * Ct(V"ExpList") * key("then")^-1 * V"Body")
   SwitchElse: mark("else", key("else") * V"Body")
@@ -316,9 +340,15 @@ key = (chars) ->
   TableValueList: V"TableValue" * (sym(",") * V"TableValue")^0
   TableLitLine: V"PushIndent" * V"TableValueList" * V"PopIndent" + V"Space"
 
-  TableBlockInner: Ct(V"KeyValueLine" * (V("SpaceBreak")^1 * V"KeyValueLine")^0)
-  TableBlock: mark("table",
-    V("SpaceBreak")^1 * V"Advance" * V"TableBlockInner" * V"PopIndent")
+  -- a table block must contain a real key/value line: annotations alone
+  -- can't form a table, or `if x` followed by an indented annotation would
+  -- parse the annotation as an invoke argument of x
+  TableBlockInner: Ct((V"AnnotationComment" * V("EmptyLineNA")^1)^0 *
+    V"KeyValueLine" * (V("EmptyLineNA")^1 * V"TableBlockLine")^0)
+  TableBlockLine: V"AnnotationComment" + V"KeyValueLine"
+  TableBlock: mark("table", V("EmptyLineNA")^1 * V"TableBlockRest")
+  TableBlockRest: V"Advance" * V"TableBlockInner" * V"PopIndent" +
+    V"AnnotationDiscard" * V("EmptyLineNA")^0 * V"TableBlockRest"
 
   ClassDecl: mark("class",
     key("class") * -P(":") *
@@ -326,9 +356,11 @@ key = (chars) ->
     (key("extends") * V"PreventIndent" * V"Exp" * V"PopIndent" + C(P""))^-1 *
     (V"ClassBlock" + Ct(P"")))
 
-  ClassBlock: V("SpaceBreak")^1 * V"Advance" *
-    Ct(V"ClassLine" * (V("SpaceBreak")^1 * V"ClassLine")^0) * V"PopIndent"
-  ClassLine: V"CheckIndent" * (
+  ClassBlock: V("EmptyLineNA")^1 * V"ClassBlockRest"
+  ClassBlockRest: V"Advance" *
+      Ct(V"ClassLine" * (V("EmptyLineNA")^1 * V"ClassLine")^0) * V"PopIndent" +
+    V"AnnotationDiscard" * V("EmptyLineNA")^0 * V"ClassBlockRest"
+  ClassLine: V"AnnotationComment" + V"CheckIndent" * (
     (mark("props", V"KeyValueList") +
      mark("stm", V"Statement") +
      mark("stm", V"Exp")) * sym(",")^-1)

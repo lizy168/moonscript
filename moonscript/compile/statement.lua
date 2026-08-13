@@ -11,6 +11,10 @@ return {
   raw = function(self, node)
     return self:add(node[2])
   end,
+  annotation = function(self, node)
+    self:add(node[2], node[-1])
+    return nil
+  end,
   declare_constants = function(self, node)
     local _list_0 = node[2]
     for _index_0 = 1, #_list_0 do

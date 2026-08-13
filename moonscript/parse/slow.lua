@@ -429,7 +429,7 @@ do
     cmt_fns[3] = fn
   end
   do
-    local chunk, load_err = load_chunk("return function(name, p)\n      return {\n        {\"key_literal\", name},\n        {\"ref\", name, [-1] = p},\n      }\n    end", "pgen Cfn 4")
+    local chunk, load_err = load_chunk("return function(...)\n    if select(\"#\", ...) == 1 then\n      return ...\n    end\n    return {\"exp\", ...}\n  end", "pgen Cfn 4")
     if not chunk then
       error("Failed to load Cfn callback 4: " .. tostring(load_err))
     end
@@ -443,7 +443,7 @@ do
     cmt_fns[4] = fn
   end
   do
-    local chunk, load_err = load_chunk("    local tree = require(\"moonscript.parse.tree\")\n    return function(callee, args)\n      return tree.join_chain(callee, args)\n    end", "pgen Cfn 5")
+    local chunk, load_err = load_chunk("return function(name, p)\n      return {\n        {\"key_literal\", name},\n        {\"ref\", name, [-1] = p},\n      }\n    end", "pgen Cfn 5")
     if not chunk then
       error("Failed to load Cfn callback 5: " .. tostring(load_err))
     end
@@ -457,7 +457,7 @@ do
     cmt_fns[5] = fn
   end
   do
-    local chunk, load_err = load_chunk("return function(...)\n    if select(\"#\", ...) == 1 then\n      return ...\n    end\n    return {\"exp\", ...}\n  end", "pgen Cfn 6")
+    local chunk, load_err = load_chunk("    local tree = require(\"moonscript.parse.tree\")\n    return function(callee, args)\n      return tree.join_chain(callee, args)\n    end", "pgen Cfn 6")
     if not chunk then
       error("Failed to load Cfn callback 6: " .. tostring(load_err))
     end
@@ -494,13 +494,13 @@ do
 end
 
 -- Character set lookup tables (byte -> true)
-sets[1] = { [46] = true, [92] = true } -- ".\\"
-sets[2] = { [43] = true, [45] = true, [42] = true, [47] = true, [37] = true, [94] = true, [62] = true, [60] = true, [124] = true, [38] = true } -- "+-*/%^><|&"
-sets[3] = { [13] = true, [10] = true } -- "\r\n"
-sets[4] = { [117] = true, [85] = true } -- "uU"
-sets[5] = { [108] = true, [76] = true } -- "lL"
-sets[6] = { [101] = true, [69] = true } -- "eE"
-sets[7] = { [32] = true, [9] = true } -- " \t"
+sets[1] = { [32] = true, [9] = true } -- " \t"
+sets[2] = { [13] = true, [10] = true } -- "\r\n"
+sets[3] = { [46] = true, [92] = true } -- ".\\"
+sets[4] = { [43] = true, [45] = true, [42] = true, [47] = true, [37] = true, [94] = true, [62] = true, [60] = true, [124] = true, [38] = true } -- "+-*/%^><|&"
+sets[5] = { [117] = true, [85] = true } -- "uU"
+sets[6] = { [108] = true, [76] = true } -- "lL"
+sets[7] = { [101] = true, [69] = true } -- "eE"
 sets[8] = { [32] = true, [9] = true, [13] = true, [10] = true } -- " \t\r\n"
 
 -- FIRST-byte dispatch tables
@@ -883,6 +883,409 @@ rules["Advance"] = function(parser)
     
   end
 end
+
+  parser.depth = depth - 1
+  return parser.success
+end
+
+
+rules["AnnotationComment"] = function(parser)
+  local depth = parser.depth + 1
+  parser.depth = depth
+  if depth > MAX_DEPTH then
+    -- A hard Lua error (rather than a match failure) so the overflow can't
+    -- be silently converted into a successful parse by a predicate or choice
+    error("pgen: max recursion depth (" .. MAX_DEPTH .. ") exceeded at position " .. (parser.pos + 1))
+  end
+
+  do -- sequence with 3 patterns
+  local pp_pos, pp_cap, pp_trail = parser.pos, parser.cap_n, parser.trail_n
+  do -- zero or more repetitions
+  while true do
+    do -- match character set " \t"
+  local sb = byte(parser.input, parser.pos + 1)
+  if sb and sets[1][sb] then
+    parser.pos = parser.pos + 1
+  else
+    parser.success = false
+  end
+end
+    if not parser.success then
+      break
+    end
+  end
+  -- Only recover from ordinary failure, not labeled failure from T()
+  if not parser.throw_label then
+    parser.success = true
+  end
+end
+if parser.success then
+do -- transform capture (Cfn id=2)
+  local fn_cap_start = parser.cap_n
+  cap_push(parser, CAP_FN_OPEN, cmt_fns[2], parser.pos, 0)
+  do -- sequence with 2 patterns
+  local pp_pos, pp_cap, pp_trail = parser.pos, parser.cap_n, parser.trail_n
+  cap_push(parser, CAP_POS, nil, parser.pos, 0) -- position capture
+if parser.success then
+do -- capture table
+  local ct_cap_start = parser.cap_n
+  cap_push(parser, CAP_TBL_OPEN, nil, 0, 0)
+  do -- sequence with 2 patterns
+  local pp_pos, pp_cap, pp_trail = parser.pos, parser.cap_n, parser.trail_n
+  do -- constant capture (1 values)
+  cap_push(parser, CAP_CONST, "annotation", 0, 0)
+end
+if parser.success then
+do -- capture
+  local cap_start_pos = parser.pos
+  do -- sequence with 2 patterns
+  local pp_pos = parser.pos
+  rules["AnnotationPrefix"](parser)
+if parser.success then
+do -- zero or more repetitions
+  while true do
+    do -- sequence with 2 patterns
+  local pp_pos = parser.pos
+  do -- negate (only match if pattern fails)
+  local pp_pos = parser.pos
+  do -- match character set "\r\n"
+  local sb = byte(parser.input, parser.pos + 1)
+  if sb and sets[2][sb] then
+    parser.pos = parser.pos + 1
+  else
+    parser.success = false
+  end
+end
+  if parser.success then
+    -- Pattern matched, so negate fails
+    parser.pos = pp_pos
+    parser.success = false
+    record_furthest(parser)
+    
+  else
+    -- Pattern failed, so negate succeeds
+    parser.success = true
+    -- Swallow labeled failures inside predicates (LPegLabel behavior)
+    if parser.throw_label then
+      parser.throw_label = nil
+      parser.throw_pos = 0
+    end
+    parser.pos = pp_pos
+  end
+end
+if parser.success then
+-- match any 1 characters
+if parser.pos + 1 <= parser.input_len then
+  parser.pos = parser.pos + 1
+else
+  parser.success = false
+  record_furthest(parser)
+  
+end
+end
+  if not parser.success then
+    parser.pos = pp_pos
+  end
+end
+    if not parser.success then
+      break
+    end
+  end
+  -- Only recover from ordinary failure, not labeled failure from T()
+  if not parser.throw_label then
+    parser.success = true
+  end
+end
+end
+  if not parser.success then
+    parser.pos = pp_pos
+  end
+end
+  if parser.success then
+    cap_push(parser, CAP_STR, nil, cap_start_pos, parser.pos - cap_start_pos)
+  end
+end
+end
+  if not parser.success then
+    parser.pos = pp_pos parser.cap_n = pp_cap ind_trail_rewind(parser, pp_trail)
+  end
+end
+  if parser.success then
+    cap_push(parser, CAP_TBL_CLOSE, nil, 0, 0)
+  else
+    parser.cap_n = ct_cap_start
+  end
+end
+end
+  if not parser.success then
+    parser.pos = pp_pos parser.cap_n = pp_cap ind_trail_rewind(parser, pp_trail)
+  end
+end
+  if parser.success then
+    cap_push(parser, CAP_FN_CLOSE, nil, parser.pos, 0)
+  else
+    parser.cap_n = fn_cap_start
+  end
+end
+end
+if parser.success then
+do -- lookahead (match without consuming input)
+  local pp_pos = parser.pos
+  rules["Stop"](parser)
+  if parser.success then
+    parser.pos = pp_pos
+  end
+end
+end
+  if not parser.success then
+    parser.pos = pp_pos parser.cap_n = pp_cap ind_trail_rewind(parser, pp_trail)
+  end
+end
+
+  parser.depth = depth - 1
+  return parser.success
+end
+
+
+rules["AnnotationDiscard"] = function(parser)
+  local start = parser.pos
+    -- Position-pure rule: a single-slot memo short-circuits the repeated
+  -- calls that backtracking alternatives make at the same position
+  if parser.memo_pos[1] == start + 1 then
+    local memo_end = parser.memo_end[1]
+    if memo_end == -1 then
+      parser.success = false
+      return false
+    end
+    parser.pos = memo_end
+    parser.success = true
+    return true
+  end
+local depth = parser.depth + 1
+  parser.depth = depth
+  if depth > MAX_DEPTH then
+    -- A hard Lua error (rather than a match failure) so the overflow can't
+    -- be silently converted into a successful parse by a predicate or choice
+    error("pgen: max recursion depth (" .. MAX_DEPTH .. ") exceeded at position " .. (parser.pos + 1))
+  end
+
+  do -- sequence with 4 patterns
+  local pp_pos = parser.pos
+  do -- zero or more repetitions
+  while true do
+    do -- match character set " \t"
+  local sb = byte(parser.input, parser.pos + 1)
+  if sb and sets[1][sb] then
+    parser.pos = parser.pos + 1
+  else
+    parser.success = false
+  end
+end
+    if not parser.success then
+      break
+    end
+  end
+  -- Only recover from ordinary failure, not labeled failure from T()
+  if not parser.throw_label then
+    parser.success = true
+  end
+end
+if parser.success then
+rules["AnnotationPrefix"](parser)
+end
+if parser.success then
+do -- zero or more repetitions
+  while true do
+    do -- sequence with 2 patterns
+  local pp_pos = parser.pos
+  do -- negate (only match if pattern fails)
+  local pp_pos = parser.pos
+  do -- match character set "\r\n"
+  local sb = byte(parser.input, parser.pos + 1)
+  if sb and sets[2][sb] then
+    parser.pos = parser.pos + 1
+  else
+    parser.success = false
+  end
+end
+  if parser.success then
+    -- Pattern matched, so negate fails
+    parser.pos = pp_pos
+    parser.success = false
+    record_furthest(parser)
+    
+  else
+    -- Pattern failed, so negate succeeds
+    parser.success = true
+    -- Swallow labeled failures inside predicates (LPegLabel behavior)
+    if parser.throw_label then
+      parser.throw_label = nil
+      parser.throw_pos = 0
+    end
+    parser.pos = pp_pos
+  end
+end
+if parser.success then
+-- match any 1 characters
+if parser.pos + 1 <= parser.input_len then
+  parser.pos = parser.pos + 1
+else
+  parser.success = false
+  record_furthest(parser)
+  
+end
+end
+  if not parser.success then
+    parser.pos = pp_pos
+  end
+end
+    if not parser.success then
+      break
+    end
+  end
+  -- Only recover from ordinary failure, not labeled failure from T()
+  if not parser.throw_label then
+    parser.success = true
+  end
+end
+end
+if parser.success then
+rules["Break"](parser)
+end
+  if not parser.success then
+    parser.pos = pp_pos
+  end
+end
+  parser.memo_pos[1] = start + 1
+  parser.memo_end[1] = parser.success and parser.pos or -1
+
+  parser.depth = depth - 1
+  return parser.success
+end
+
+
+rules["AnnotationIndent"] = function(parser)
+  local depth = parser.depth + 1
+  parser.depth = depth
+  if depth > MAX_DEPTH then
+    -- A hard Lua error (rather than a match failure) so the overflow can't
+    -- be silently converted into a successful parse by a predicate or choice
+    error("pgen: max recursion depth (" .. MAX_DEPTH .. ") exceeded at position " .. (parser.pos + 1))
+  end
+
+  do -- choice with 2 alternatives
+  do -- indenter check (stack 0): consume whitespace, width must equal top
+  local ind_width, ind_end = ind_measure(parser, 4)
+  local ind_s = parser.ind_stacks[1]
+  if ind_s.n > 0 and ind_s[ind_s.n] == ind_width then
+    parser.pos = ind_end
+  else
+    parser.success = false
+    record_furthest(parser)
+    
+  end
+end
+if not parser.success and not parser.throw_label then
+  parser.success = true
+  do -- sequence with 2 patterns
+  local pp_pos, pp_cap, pp_trail = parser.pos, parser.cap_n, parser.trail_n
+  do -- indenter advance (stack 0): push width if deeper than top, consume nothing
+  local ind_width = ind_measure(parser, 4)
+  local ind_s = parser.ind_stacks[1]
+  if ind_s.n > 0 and ind_width > ind_s[ind_s.n] then
+    ind_push(parser, 1, ind_width)
+  else
+    parser.success = false
+    record_furthest(parser)
+    
+  end
+end
+if parser.success then
+-- indenter pop (stack 0)
+if not ind_pop(parser, 1) then
+  parser.success = false
+  record_furthest(parser)
+  
+end
+end
+  if not parser.success then
+    parser.pos = pp_pos parser.cap_n = pp_cap ind_trail_rewind(parser, pp_trail)
+  end
+end
+end
+end
+
+  parser.depth = depth - 1
+  return parser.success
+end
+
+
+rules["AnnotationPrefix"] = function(parser)
+  local start = parser.pos
+    -- Position-pure rule: a single-slot memo short-circuits the repeated
+  -- calls that backtracking alternatives make at the same position
+  if parser.memo_pos[2] == start + 1 then
+    local memo_end = parser.memo_end[2]
+    if memo_end == -1 then
+      parser.success = false
+      return false
+    end
+    parser.pos = memo_end
+    parser.success = true
+    return true
+  end
+local depth = parser.depth + 1
+  parser.depth = depth
+  if depth > MAX_DEPTH then
+    -- A hard Lua error (rather than a match failure) so the overflow can't
+    -- be silently converted into a successful parse by a predicate or choice
+    error("pgen: max recursion depth (" .. MAX_DEPTH .. ") exceeded at position " .. (parser.pos + 1))
+  end
+
+  do -- sequence with 2 patterns
+  local pp_pos = parser.pos
+  -- match literal "---"
+if sub(parser.input, parser.pos + 1, parser.pos + 3) == "---" then
+  parser.pos = parser.pos + 3
+else
+  parser.success = false
+  record_furthest(parser)
+  
+end
+if parser.success then
+do -- negate (only match if pattern fails)
+  local pp_pos = parser.pos
+  -- match single character "-"
+if byte(parser.input, parser.pos + 1) == 45 then
+  parser.pos = parser.pos + 1
+else
+  parser.success = false
+  
+end
+  if parser.success then
+    -- Pattern matched, so negate fails
+    parser.pos = pp_pos
+    parser.success = false
+    record_furthest(parser)
+    
+  else
+    -- Pattern failed, so negate succeeds
+    parser.success = true
+    -- Swallow labeled failures inside predicates (LPegLabel behavior)
+    if parser.throw_label then
+      parser.throw_label = nil
+      parser.throw_pos = 0
+    end
+    parser.pos = pp_pos
+  end
+end
+end
+  if not parser.success then
+    parser.pos = pp_pos
+  end
+end
+  parser.memo_pos[2] = start + 1
+  parser.memo_end[2] = parser.success and parser.pos or -1
 
   parser.depth = depth - 1
   return parser.success
@@ -1277,28 +1680,14 @@ rules["Body"] = function(parser)
   end
 
   do -- choice with 2 alternatives
-  do -- sequence with 4 patterns
+  do -- sequence with 3 patterns
   local pp_pos, pp_cap, pp_trail = parser.pos, parser.cap_n, parser.trail_n
   rules["Space"](parser)
 if parser.success then
 rules["Break"](parser)
 end
 if parser.success then
-do -- zero or more repetitions
-  while true do
-    rules["EmptyLine"](parser)
-    if not parser.success then
-      break
-    end
-  end
-  -- Only recover from ordinary failure, not labeled failure from T()
-  if not parser.throw_label then
-    parser.success = true
-  end
-end
-end
-if parser.success then
-rules["InBlock"](parser)
+rules["BodyBlock"](parser)
 end
   if not parser.success then
     parser.pos = pp_pos parser.cap_n = pp_cap ind_trail_rewind(parser, pp_trail)
@@ -1324,12 +1713,63 @@ end
 end
 
 
+rules["BodyBlock"] = function(parser)
+  local depth = parser.depth + 1
+  parser.depth = depth
+  if depth > MAX_DEPTH then
+    -- A hard Lua error (rather than a match failure) so the overflow can't
+    -- be silently converted into a successful parse by a predicate or choice
+    error("pgen: max recursion depth (" .. MAX_DEPTH .. ") exceeded at position " .. (parser.pos + 1))
+  end
+
+  do -- sequence with 2 patterns
+  local pp_pos, pp_cap, pp_trail = parser.pos, parser.cap_n, parser.trail_n
+  do -- zero or more repetitions
+  while true do
+    rules["EmptyLineNA"](parser)
+    if not parser.success then
+      break
+    end
+  end
+  -- Only recover from ordinary failure, not labeled failure from T()
+  if not parser.throw_label then
+    parser.success = true
+  end
+end
+if parser.success then
+do -- choice with 2 alternatives
+  rules["InBlock"](parser)
+if not parser.success and not parser.throw_label then
+  parser.success = true
+  do -- sequence with 2 patterns
+  local pp_pos, pp_cap, pp_trail = parser.pos, parser.cap_n, parser.trail_n
+  rules["AnnotationDiscard"](parser)
+if parser.success then
+rules["BodyBlock"](parser)
+end
+  if not parser.success then
+    parser.pos = pp_pos parser.cap_n = pp_cap ind_trail_rewind(parser, pp_trail)
+  end
+end
+end
+end
+end
+  if not parser.success then
+    parser.pos = pp_pos parser.cap_n = pp_cap ind_trail_rewind(parser, pp_trail)
+  end
+end
+
+  parser.depth = depth - 1
+  return parser.success
+end
+
+
 rules["Break"] = function(parser)
   local start = parser.pos
     -- Position-pure rule: a single-slot memo short-circuits the repeated
   -- calls that backtracking alternatives make at the same position
-  if parser.memo_pos[1] == start + 1 then
-    local memo_end = parser.memo_end[1]
+  if parser.memo_pos[3] == start + 1 then
+    local memo_end = parser.memo_end[3]
     if memo_end == -1 then
       parser.success = false
       return false
@@ -1383,8 +1823,8 @@ end
     parser.pos = pp_pos
   end
 end
-  parser.memo_pos[1] = start + 1
-  parser.memo_end[1] = parser.success and parser.pos or -1
+  parser.memo_pos[3] = start + 1
+  parser.memo_end[3] = parser.success and parser.pos or -1
 
   parser.depth = depth - 1
   return parser.success
@@ -1634,6 +2074,75 @@ end
 end
 
 
+rules["CaseSep"] = function(parser)
+  local start = parser.pos
+    -- Position-pure rule: a single-slot memo short-circuits the repeated
+  -- calls that backtracking alternatives make at the same position
+  if parser.memo_pos[4] == start + 1 then
+    local memo_end = parser.memo_end[4]
+    if memo_end == -1 then
+      parser.success = false
+      return false
+    end
+    parser.pos = memo_end
+    parser.success = true
+    return true
+  end
+local depth = parser.depth + 1
+  parser.depth = depth
+  if depth > MAX_DEPTH then
+    -- A hard Lua error (rather than a match failure) so the overflow can't
+    -- be silently converted into a successful parse by a predicate or choice
+    error("pgen: max recursion depth (" .. MAX_DEPTH .. ") exceeded at position " .. (parser.pos + 1))
+  end
+
+  do -- sequence with 2 patterns
+  local pp_pos = parser.pos
+  do -- at least 1 repetitions
+  local pp_pos = parser.pos
+  local rep_count = 0
+  while true do
+    rules["Break"](parser)
+    if not parser.success then
+      break
+    end
+    rep_count = rep_count + 1
+  end
+  if parser.throw_label then
+    -- Keep failure state, propagate labeled failure
+  elseif rep_count >= 1 then
+    parser.success = true
+  else
+    parser.pos = pp_pos
+    
+  end
+end
+if parser.success then
+do -- zero or more repetitions
+  while true do
+    rules["EmptyLine"](parser)
+    if not parser.success then
+      break
+    end
+  end
+  -- Only recover from ordinary failure, not labeled failure from T()
+  if not parser.throw_label then
+    parser.success = true
+  end
+end
+end
+  if not parser.success then
+    parser.pos = pp_pos
+  end
+end
+  parser.memo_pos[4] = start + 1
+  parser.memo_end[4] = parser.success and parser.pos or -1
+
+  parser.depth = depth - 1
+  return parser.success
+end
+
+
 rules["Chain"] = function(parser)
   local depth = parser.depth + 1
   parser.depth = depth
@@ -1665,7 +2174,7 @@ if not parser.success and not parser.throw_label then
   local pp_pos = parser.pos
   do -- match character set ".\\"
   local sb = byte(parser.input, parser.pos + 1)
-  if sb and sets[1][sb] then
+  if sb and sets[3][sb] then
     parser.pos = parser.pos + 1
   else
     parser.success = false
@@ -1931,9 +2440,9 @@ rules["ChainValue"] = function(parser)
     error("pgen: max recursion depth (" .. MAX_DEPTH .. ") exceeded at position " .. (parser.pos + 1))
   end
 
-  do -- transform capture (Cfn id=5)
+  do -- transform capture (Cfn id=6)
   local fn_cap_start = parser.cap_n
-  cap_push(parser, CAP_FN_OPEN, cmt_fns[5], parser.pos, 0)
+  cap_push(parser, CAP_FN_OPEN, cmt_fns[6], parser.pos, 0)
   do -- sequence with 2 patterns
   local pp_pos, pp_cap, pp_trail = parser.pos, parser.cap_n, parser.trail_n
   do -- choice with 2 alternatives
@@ -2003,7 +2512,7 @@ do -- capture
   local cap_start_pos = parser.pos
   do -- match character set "+-*/%^><|&"
   local sb = byte(parser.input, parser.pos + 1)
-  if sb and sets[2][sb] then
+  if sb and sets[4][sb] then
     parser.pos = parser.pos + 1
   else
     parser.success = false
@@ -2059,13 +2568,13 @@ rules["ClassBlock"] = function(parser)
     error("pgen: max recursion depth (" .. MAX_DEPTH .. ") exceeded at position " .. (parser.pos + 1))
   end
 
-  do -- sequence with 4 patterns
+  do -- sequence with 2 patterns
   local pp_pos, pp_cap, pp_trail = parser.pos, parser.cap_n, parser.trail_n
   do -- at least 1 repetitions
   local pp_pos = parser.pos
   local rep_count = 0
   while true do
-    rules["SpaceBreak"](parser)
+    rules["EmptyLineNA"](parser)
     if not parser.success then
       break
     end
@@ -2081,8 +2590,31 @@ rules["ClassBlock"] = function(parser)
   end
 end
 if parser.success then
-rules["Advance"](parser)
+rules["ClassBlockRest"](parser)
 end
+  if not parser.success then
+    parser.pos = pp_pos parser.cap_n = pp_cap ind_trail_rewind(parser, pp_trail)
+  end
+end
+
+  parser.depth = depth - 1
+  return parser.success
+end
+
+
+rules["ClassBlockRest"] = function(parser)
+  local depth = parser.depth + 1
+  parser.depth = depth
+  if depth > MAX_DEPTH then
+    -- A hard Lua error (rather than a match failure) so the overflow can't
+    -- be silently converted into a successful parse by a predicate or choice
+    error("pgen: max recursion depth (" .. MAX_DEPTH .. ") exceeded at position " .. (parser.pos + 1))
+  end
+
+  do -- choice with 2 alternatives
+  do -- sequence with 3 patterns
+  local pp_pos, pp_cap, pp_trail = parser.pos, parser.cap_n, parser.trail_n
+  rules["Advance"](parser)
 if parser.success then
 do -- capture table
   local ct_cap_start = parser.cap_n
@@ -2099,7 +2631,7 @@ do -- zero or more repetitions
   local pp_pos = parser.pos
   local rep_count = 0
   while true do
-    rules["SpaceBreak"](parser)
+    rules["EmptyLineNA"](parser)
     if not parser.success then
       break
     end
@@ -2148,6 +2680,34 @@ end
   if not parser.success then
     parser.pos = pp_pos parser.cap_n = pp_cap ind_trail_rewind(parser, pp_trail)
   end
+end
+if not parser.success and not parser.throw_label then
+  parser.success = true
+  do -- sequence with 3 patterns
+  local pp_pos, pp_cap, pp_trail = parser.pos, parser.cap_n, parser.trail_n
+  rules["AnnotationDiscard"](parser)
+if parser.success then
+do -- zero or more repetitions
+  while true do
+    rules["EmptyLineNA"](parser)
+    if not parser.success then
+      break
+    end
+  end
+  -- Only recover from ordinary failure, not labeled failure from T()
+  if not parser.throw_label then
+    parser.success = true
+  end
+end
+end
+if parser.success then
+rules["ClassBlockRest"](parser)
+end
+  if not parser.success then
+    parser.pos = pp_pos parser.cap_n = pp_cap ind_trail_rewind(parser, pp_trail)
+  end
+end
+end
 end
 
   parser.depth = depth - 1
@@ -2396,6 +2956,10 @@ rules["ClassLine"] = function(parser)
     error("pgen: max recursion depth (" .. MAX_DEPTH .. ") exceeded at position " .. (parser.pos + 1))
   end
 
+  do -- choice with 2 alternatives
+  rules["AnnotationComment"](parser)
+if not parser.success and not parser.throw_label then
+  parser.success = true
   do -- sequence with 3 patterns
   local pp_pos, pp_cap, pp_trail = parser.pos, parser.cap_n, parser.trail_n
   rules["CheckIndent"](parser)
@@ -2508,6 +3072,8 @@ end
   if not parser.success then
     parser.pos = pp_pos parser.cap_n = pp_cap ind_trail_rewind(parser, pp_trail)
   end
+end
+end
 end
 
   parser.depth = depth - 1
@@ -2628,8 +3194,8 @@ rules["Comment"] = function(parser)
   local start = parser.pos
     -- Position-pure rule: a single-slot memo short-circuits the repeated
   -- calls that backtracking alternatives make at the same position
-  if parser.memo_pos[2] == start + 1 then
-    local memo_end = parser.memo_end[2]
+  if parser.memo_pos[5] == start + 1 then
+    local memo_end = parser.memo_end[5]
     if memo_end == -1 then
       parser.success = false
       return false
@@ -2665,7 +3231,7 @@ do -- zero or more repetitions
   local pp_pos = parser.pos
   do -- match character set "\r\n"
   local sb = byte(parser.input, parser.pos + 1)
-  if sb and sets[3][sb] then
+  if sb and sets[2][sb] then
     parser.pos = parser.pos + 1
   else
     parser.success = false
@@ -2725,8 +3291,8 @@ end
     parser.pos = pp_pos
   end
 end
-  parser.memo_pos[2] = start + 1
-  parser.memo_end[2] = parser.success and parser.pos or -1
+  parser.memo_pos[5] = start + 1
+  parser.memo_end[5] = parser.success and parser.pos or -1
 
   parser.depth = depth - 1
   return parser.success
@@ -3544,8 +4110,8 @@ rules["DoubleStringInner"] = function(parser)
   local start = parser.pos
     -- Position-pure rule: a single-slot memo short-circuits the repeated
   -- calls that backtracking alternatives make at the same position
-  if parser.memo_pos[3] == start + 1 then
-    local memo_end = parser.memo_end[3]
+  if parser.memo_pos[6] == start + 1 then
+    local memo_end = parser.memo_end[6]
     if memo_end == -1 then
       parser.success = false
       return false
@@ -3628,8 +4194,8 @@ end
 end
 end
 end
-  parser.memo_pos[3] = start + 1
-  parser.memo_end[3] = parser.success and parser.pos or -1
+  parser.memo_pos[6] = start + 1
+  parser.memo_end[6] = parser.success and parser.pos or -1
 
   parser.depth = depth - 1
   return parser.success
@@ -3698,8 +4264,8 @@ rules["EmptyLine"] = function(parser)
   local start = parser.pos
     -- Position-pure rule: a single-slot memo short-circuits the repeated
   -- calls that backtracking alternatives make at the same position
-  if parser.memo_pos[4] == start + 1 then
-    local memo_end = parser.memo_end[4]
+  if parser.memo_pos[7] == start + 1 then
+    local memo_end = parser.memo_end[7]
     if memo_end == -1 then
       parser.success = false
       return false
@@ -3717,8 +4283,106 @@ local depth = parser.depth + 1
   end
 
   rules["SpaceBreak"](parser)
-  parser.memo_pos[4] = start + 1
-  parser.memo_end[4] = parser.success and parser.pos or -1
+  parser.memo_pos[7] = start + 1
+  parser.memo_end[7] = parser.success and parser.pos or -1
+
+  parser.depth = depth - 1
+  return parser.success
+end
+
+
+rules["EmptyLineNA"] = function(parser)
+  local start = parser.pos
+    -- Position-pure rule: a single-slot memo short-circuits the repeated
+  -- calls that backtracking alternatives make at the same position
+  if parser.memo_pos[8] == start + 1 then
+    local memo_end = parser.memo_end[8]
+    if memo_end == -1 then
+      parser.success = false
+      return false
+    end
+    parser.pos = memo_end
+    parser.success = true
+    return true
+  end
+local depth = parser.depth + 1
+  parser.depth = depth
+  if depth > MAX_DEPTH then
+    -- A hard Lua error (rather than a match failure) so the overflow can't
+    -- be silently converted into a successful parse by a predicate or choice
+    error("pgen: max recursion depth (" .. MAX_DEPTH .. ") exceeded at position " .. (parser.pos + 1))
+  end
+
+  do -- sequence with 4 patterns
+  local pp_pos = parser.pos
+  do -- zero or more repetitions
+  while true do
+    do -- match character set " \t"
+  local sb = byte(parser.input, parser.pos + 1)
+  if sb and sets[1][sb] then
+    parser.pos = parser.pos + 1
+  else
+    parser.success = false
+  end
+end
+    if not parser.success then
+      break
+    end
+  end
+  -- Only recover from ordinary failure, not labeled failure from T()
+  if not parser.throw_label then
+    parser.success = true
+  end
+end
+if parser.success then
+do -- negate (only match if pattern fails)
+  local pp_pos = parser.pos
+  rules["AnnotationPrefix"](parser)
+  if parser.success then
+    -- Pattern matched, so negate fails
+    parser.pos = pp_pos
+    parser.success = false
+    record_furthest(parser)
+    
+  else
+    -- Pattern failed, so negate succeeds
+    parser.success = true
+    -- Swallow labeled failures inside predicates (LPegLabel behavior)
+    if parser.throw_label then
+      parser.throw_label = nil
+      parser.throw_pos = 0
+    end
+    parser.pos = pp_pos
+  end
+end
+end
+if parser.success then
+do -- at most 1 repetitions
+  local rep_count = 0
+  while rep_count < 1 do
+    local before_pos = parser.pos
+    rules["Comment"](parser)
+    if not parser.success or before_pos == parser.pos then
+      -- Break on failure or zero-width match
+      -- Only recover from ordinary failure, not labeled failure from T()
+      if not parser.throw_label then
+        parser.success = true
+      end
+      break
+    end
+    rep_count = rep_count + 1
+  end
+end
+end
+if parser.success then
+rules["Break"](parser)
+end
+  if not parser.success then
+    parser.pos = pp_pos
+  end
+end
+  parser.memo_pos[8] = start + 1
+  parser.memo_end[8] = parser.success and parser.pos or -1
 
   parser.depth = depth - 1
   return parser.success
@@ -3734,9 +4398,9 @@ rules["Exp"] = function(parser)
     error("pgen: max recursion depth (" .. MAX_DEPTH .. ") exceeded at position " .. (parser.pos + 1))
   end
 
-  do -- transform capture (Cfn id=6)
+  do -- transform capture (Cfn id=4)
   local fn_cap_start = parser.cap_n
-  cap_push(parser, CAP_FN_OPEN, cmt_fns[6], parser.pos, 0)
+  cap_push(parser, CAP_FN_OPEN, cmt_fns[4], parser.pos, 0)
   do -- sequence with 2 patterns
   local pp_pos, pp_cap, pp_trail = parser.pos, parser.cap_n, parser.trail_n
   rules["Value"](parser)
@@ -6761,9 +7425,9 @@ rules["KeyValue"] = function(parser)
   end
 
   do -- choice with 2 alternatives
-  do -- transform capture (Cfn id=4)
+  do -- transform capture (Cfn id=5)
   local fn_cap_start = parser.cap_n
-  cap_push(parser, CAP_FN_OPEN, cmt_fns[4], parser.pos, 0)
+  cap_push(parser, CAP_FN_OPEN, cmt_fns[5], parser.pos, 0)
   do -- sequence with 5 patterns
   local pp_pos, pp_cap, pp_trail = parser.pos, parser.cap_n, parser.trail_n
   rules["Space"](parser)
@@ -7085,7 +7749,19 @@ rules["Line"] = function(parser)
     error("pgen: max recursion depth (" .. MAX_DEPTH .. ") exceeded at position " .. (parser.pos + 1))
   end
 
-  do -- choice with 2 alternatives
+  do -- choice with 3 alternatives
+  do -- sequence with 2 patterns
+  local pp_pos, pp_cap, pp_trail = parser.pos, parser.cap_n, parser.trail_n
+  rules["AnnotationIndent"](parser)
+if parser.success then
+rules["AnnotationComment"](parser)
+end
+  if not parser.success then
+    parser.pos = pp_pos parser.cap_n = pp_cap ind_trail_rewind(parser, pp_trail)
+  end
+end
+if not parser.success and not parser.throw_label then
+  parser.success = true
   do -- sequence with 2 patterns
   local pp_pos, pp_cap, pp_trail = parser.pos, parser.cap_n, parser.trail_n
   rules["CheckIndent"](parser)
@@ -7096,11 +7772,70 @@ end
     parser.pos = pp_pos parser.cap_n = pp_cap ind_trail_rewind(parser, pp_trail)
   end
 end
+end
 if not parser.success and not parser.throw_label then
   parser.success = true
-  do -- sequence with 2 patterns
+  do -- sequence with 4 patterns
   local pp_pos = parser.pos
-  rules["Space"](parser)
+  do -- zero or more repetitions
+  while true do
+    do -- match character set " \t"
+  local sb = byte(parser.input, parser.pos + 1)
+  if sb and sets[1][sb] then
+    parser.pos = parser.pos + 1
+  else
+    parser.success = false
+  end
+end
+    if not parser.success then
+      break
+    end
+  end
+  -- Only recover from ordinary failure, not labeled failure from T()
+  if not parser.throw_label then
+    parser.success = true
+  end
+end
+if parser.success then
+do -- negate (only match if pattern fails)
+  local pp_pos = parser.pos
+  rules["AnnotationPrefix"](parser)
+  if parser.success then
+    -- Pattern matched, so negate fails
+    parser.pos = pp_pos
+    parser.success = false
+    record_furthest(parser)
+    
+  else
+    -- Pattern failed, so negate succeeds
+    parser.success = true
+    -- Swallow labeled failures inside predicates (LPegLabel behavior)
+    if parser.throw_label then
+      parser.throw_label = nil
+      parser.throw_pos = 0
+    end
+    parser.pos = pp_pos
+  end
+end
+end
+if parser.success then
+do -- at most 1 repetitions
+  local rep_count = 0
+  while rep_count < 1 do
+    local before_pos = parser.pos
+    rules["Comment"](parser)
+    if not parser.success or before_pos == parser.pos then
+      -- Break on failure or zero-width match
+      -- Only recover from ordinary failure, not labeled failure from T()
+      if not parser.throw_label then
+        parser.success = true
+      end
+      break
+    end
+    rep_count = rep_count + 1
+  end
+end
+end
 if parser.success then
 do -- lookahead (match without consuming input)
   local pp_pos = parser.pos
@@ -8750,7 +9485,7 @@ do -- at most 1 repetitions
     local before_pos = parser.pos
     do -- match character set "uU"
   local sb = byte(parser.input, parser.pos + 1)
-  if sb and sets[4][sb] then
+  if sb and sets[5][sb] then
     parser.pos = parser.pos + 1
   else
     parser.success = false
@@ -8774,7 +9509,7 @@ do -- at least 2 repetitions
   while true do
     do -- match character set "lL"
   local sb = byte(parser.input, parser.pos + 1)
-  if sb and sets[5][sb] then
+  if sb and sets[6][sb] then
     parser.pos = parser.pos + 1
   else
     parser.success = false
@@ -8853,7 +9588,7 @@ do -- at most 1 repetitions
     local before_pos = parser.pos
     do -- match character set "uU"
   local sb = byte(parser.input, parser.pos + 1)
-  if sb and sets[4][sb] then
+  if sb and sets[5][sb] then
     parser.pos = parser.pos + 1
   else
     parser.success = false
@@ -8878,7 +9613,7 @@ do -- at least 2 repetitions
   while true do
     do -- match character set "lL"
   local sb = byte(parser.input, parser.pos + 1)
-  if sb and sets[5][sb] then
+  if sb and sets[6][sb] then
     parser.pos = parser.pos + 1
   else
     parser.success = false
@@ -9056,7 +9791,7 @@ do -- at most 1 repetitions
   local pp_pos = parser.pos
   do -- match character set "eE"
   local sb = byte(parser.input, parser.pos + 1)
-  if sb and sets[6][sb] then
+  if sb and sets[7][sb] then
     parser.pos = parser.pos + 1
   else
     parser.success = false
@@ -9526,8 +10261,8 @@ rules["Shebang"] = function(parser)
   local start = parser.pos
     -- Position-pure rule: a single-slot memo short-circuits the repeated
   -- calls that backtracking alternatives make at the same position
-  if parser.memo_pos[5] == start + 1 then
-    local memo_end = parser.memo_end[5]
+  if parser.memo_pos[9] == start + 1 then
+    local memo_end = parser.memo_end[9]
     if memo_end == -1 then
       parser.success = false
       return false
@@ -9607,8 +10342,8 @@ end
     parser.pos = pp_pos
   end
 end
-  parser.memo_pos[5] = start + 1
-  parser.memo_end[5] = parser.success and parser.pos or -1
+  parser.memo_pos[9] = start + 1
+  parser.memo_end[9] = parser.success and parser.pos or -1
 
   parser.depth = depth - 1
   return parser.success
@@ -10211,8 +10946,8 @@ rules["SomeSpace"] = function(parser)
   local start = parser.pos
     -- Position-pure rule: a single-slot memo short-circuits the repeated
   -- calls that backtracking alternatives make at the same position
-  if parser.memo_pos[6] == start + 1 then
-    local memo_end = parser.memo_end[6]
+  if parser.memo_pos[10] == start + 1 then
+    local memo_end = parser.memo_end[10]
     if memo_end == -1 then
       parser.success = false
       return false
@@ -10237,7 +10972,7 @@ local depth = parser.depth + 1
   while true do
     do -- match character set " \t"
   local sb = byte(parser.input, parser.pos + 1)
-  if sb and sets[7][sb] then
+  if sb and sets[1][sb] then
     parser.pos = parser.pos + 1
   else
     parser.success = false
@@ -10279,8 +11014,8 @@ end
     parser.pos = pp_pos
   end
 end
-  parser.memo_pos[6] = start + 1
-  parser.memo_end[6] = parser.success and parser.pos or -1
+  parser.memo_pos[10] = start + 1
+  parser.memo_end[10] = parser.success and parser.pos or -1
 
   parser.depth = depth - 1
   return parser.success
@@ -10291,8 +11026,8 @@ rules["Space"] = function(parser)
   local start = parser.pos
     -- Position-pure rule: a single-slot memo short-circuits the repeated
   -- calls that backtracking alternatives make at the same position
-  if parser.memo_pos[7] == start + 1 then
-    local memo_end = parser.memo_end[7]
+  if parser.memo_pos[11] == start + 1 then
+    local memo_end = parser.memo_end[11]
     if memo_end == -1 then
       parser.success = false
       return false
@@ -10315,7 +11050,7 @@ local depth = parser.depth + 1
   while true do
     do -- match character set " \t"
   local sb = byte(parser.input, parser.pos + 1)
-  if sb and sets[7][sb] then
+  if sb and sets[1][sb] then
     parser.pos = parser.pos + 1
   else
     parser.success = false
@@ -10352,8 +11087,8 @@ end
     parser.pos = pp_pos
   end
 end
-  parser.memo_pos[7] = start + 1
-  parser.memo_end[7] = parser.success and parser.pos or -1
+  parser.memo_pos[11] = start + 1
+  parser.memo_end[11] = parser.success and parser.pos or -1
 
   parser.depth = depth - 1
   return parser.success
@@ -10364,8 +11099,8 @@ rules["SpaceBreak"] = function(parser)
   local start = parser.pos
     -- Position-pure rule: a single-slot memo short-circuits the repeated
   -- calls that backtracking alternatives make at the same position
-  if parser.memo_pos[8] == start + 1 then
-    local memo_end = parser.memo_end[8]
+  if parser.memo_pos[12] == start + 1 then
+    local memo_end = parser.memo_end[12]
     if memo_end == -1 then
       parser.success = false
       return false
@@ -10392,8 +11127,8 @@ end
     parser.pos = pp_pos
   end
 end
-  parser.memo_pos[8] = start + 1
-  parser.memo_end[8] = parser.success and parser.pos or -1
+  parser.memo_pos[12] = start + 1
+  parser.memo_end[12] = parser.success and parser.pos or -1
 
   parser.depth = depth - 1
   return parser.success
@@ -10819,8 +11554,8 @@ rules["Stop"] = function(parser)
   local start = parser.pos
     -- Position-pure rule: a single-slot memo short-circuits the repeated
   -- calls that backtracking alternatives make at the same position
-  if parser.memo_pos[9] == start + 1 then
-    local memo_end = parser.memo_end[9]
+  if parser.memo_pos[13] == start + 1 then
+    local memo_end = parser.memo_end[13]
     if memo_end == -1 then
       parser.success = false
       return false
@@ -10870,8 +11605,8 @@ end
 end
 end
 end
-  parser.memo_pos[9] = start + 1
-  parser.memo_end[9] = parser.success and parser.pos or -1
+  parser.memo_pos[13] = start + 1
+  parser.memo_end[13] = parser.success and parser.pos or -1
 
   parser.depth = depth - 1
   return parser.success
@@ -11124,25 +11859,7 @@ do -- zero or more repetitions
   while true do
     do -- sequence with 2 patterns
   local pp_pos, pp_cap, pp_trail = parser.pos, parser.cap_n, parser.trail_n
-  do -- at least 1 repetitions
-  local pp_pos = parser.pos
-  local rep_count = 0
-  while true do
-    rules["Break"](parser)
-    if not parser.success then
-      break
-    end
-    rep_count = rep_count + 1
-  end
-  if parser.throw_label then
-    -- Keep failure state, propagate labeled failure
-  elseif rep_count >= 1 then
-    parser.success = true
-  else
-    parser.pos = pp_pos
-    
-  end
-end
+  rules["CaseSep"](parser)
 if parser.success then
 rules["SwitchCase"](parser)
 end
@@ -11167,25 +11884,7 @@ do -- at most 1 repetitions
     local before_pos = parser.pos
     do -- sequence with 2 patterns
   local pp_pos, pp_cap, pp_trail = parser.pos, parser.cap_n, parser.trail_n
-  do -- at least 1 repetitions
-  local pp_pos = parser.pos
-  local rep_count = 0
-  while true do
-    rules["Break"](parser)
-    if not parser.success then
-      break
-    end
-    rep_count = rep_count + 1
-  end
-  if parser.throw_label then
-    -- Keep failure state, propagate labeled failure
-  elseif rep_count >= 1 then
-    parser.success = true
-  else
-    parser.pos = pp_pos
-    
-  end
-end
+  rules["CaseSep"](parser)
 if parser.success then
 rules["SwitchElse"](parser)
 end
@@ -11475,7 +12174,7 @@ rules["TableBlock"] = function(parser)
   do -- capture table
   local ct_cap_start = parser.cap_n
   cap_push(parser, CAP_TBL_OPEN, nil, 0, 0)
-  do -- sequence with 5 patterns
+  do -- sequence with 3 patterns
   local pp_pos, pp_cap, pp_trail = parser.pos, parser.cap_n, parser.trail_n
   do -- constant capture (1 values)
   cap_push(parser, CAP_CONST, "table", 0, 0)
@@ -11485,7 +12184,7 @@ do -- at least 1 repetitions
   local pp_pos = parser.pos
   local rep_count = 0
   while true do
-    rules["SpaceBreak"](parser)
+    rules["EmptyLineNA"](parser)
     if not parser.success then
       break
     end
@@ -11502,13 +12201,7 @@ do -- at least 1 repetitions
 end
 end
 if parser.success then
-rules["Advance"](parser)
-end
-if parser.success then
-rules["TableBlockInner"](parser)
-end
-if parser.success then
-rules["PopIndent"](parser)
+rules["TableBlockRest"](parser)
 end
   if not parser.success then
     parser.pos = pp_pos parser.cap_n = pp_cap ind_trail_rewind(parser, pp_trail)
@@ -11538,9 +12231,50 @@ rules["TableBlockInner"] = function(parser)
   do -- capture table
   local ct_cap_start = parser.cap_n
   cap_push(parser, CAP_TBL_OPEN, nil, 0, 0)
-  do -- sequence with 2 patterns
+  do -- sequence with 3 patterns
   local pp_pos, pp_cap, pp_trail = parser.pos, parser.cap_n, parser.trail_n
-  rules["KeyValueLine"](parser)
+  do -- zero or more repetitions
+  while true do
+    do -- sequence with 2 patterns
+  local pp_pos, pp_cap, pp_trail = parser.pos, parser.cap_n, parser.trail_n
+  rules["AnnotationComment"](parser)
+if parser.success then
+do -- at least 1 repetitions
+  local pp_pos = parser.pos
+  local rep_count = 0
+  while true do
+    rules["EmptyLineNA"](parser)
+    if not parser.success then
+      break
+    end
+    rep_count = rep_count + 1
+  end
+  if parser.throw_label then
+    -- Keep failure state, propagate labeled failure
+  elseif rep_count >= 1 then
+    parser.success = true
+  else
+    parser.pos = pp_pos
+    
+  end
+end
+end
+  if not parser.success then
+    parser.pos = pp_pos parser.cap_n = pp_cap ind_trail_rewind(parser, pp_trail)
+  end
+end
+    if not parser.success then
+      break
+    end
+  end
+  -- Only recover from ordinary failure, not labeled failure from T()
+  if not parser.throw_label then
+    parser.success = true
+  end
+end
+if parser.success then
+rules["KeyValueLine"](parser)
+end
 if parser.success then
 do -- zero or more repetitions
   while true do
@@ -11550,7 +12284,7 @@ do -- zero or more repetitions
   local pp_pos = parser.pos
   local rep_count = 0
   while true do
-    rules["SpaceBreak"](parser)
+    rules["EmptyLineNA"](parser)
     if not parser.success then
       break
     end
@@ -11566,7 +12300,7 @@ do -- zero or more repetitions
   end
 end
 if parser.success then
-rules["KeyValueLine"](parser)
+rules["TableBlockLine"](parser)
 end
   if not parser.success then
     parser.pos = pp_pos parser.cap_n = pp_cap ind_trail_rewind(parser, pp_trail)
@@ -11591,6 +12325,85 @@ end
   else
     parser.cap_n = ct_cap_start
   end
+end
+
+  parser.depth = depth - 1
+  return parser.success
+end
+
+
+rules["TableBlockLine"] = function(parser)
+  local depth = parser.depth + 1
+  parser.depth = depth
+  if depth > MAX_DEPTH then
+    -- A hard Lua error (rather than a match failure) so the overflow can't
+    -- be silently converted into a successful parse by a predicate or choice
+    error("pgen: max recursion depth (" .. MAX_DEPTH .. ") exceeded at position " .. (parser.pos + 1))
+  end
+
+  do -- choice with 2 alternatives
+  rules["AnnotationComment"](parser)
+if not parser.success and not parser.throw_label then
+  parser.success = true
+  rules["KeyValueLine"](parser)
+end
+end
+
+  parser.depth = depth - 1
+  return parser.success
+end
+
+
+rules["TableBlockRest"] = function(parser)
+  local depth = parser.depth + 1
+  parser.depth = depth
+  if depth > MAX_DEPTH then
+    -- A hard Lua error (rather than a match failure) so the overflow can't
+    -- be silently converted into a successful parse by a predicate or choice
+    error("pgen: max recursion depth (" .. MAX_DEPTH .. ") exceeded at position " .. (parser.pos + 1))
+  end
+
+  do -- choice with 2 alternatives
+  do -- sequence with 3 patterns
+  local pp_pos, pp_cap, pp_trail = parser.pos, parser.cap_n, parser.trail_n
+  rules["Advance"](parser)
+if parser.success then
+rules["TableBlockInner"](parser)
+end
+if parser.success then
+rules["PopIndent"](parser)
+end
+  if not parser.success then
+    parser.pos = pp_pos parser.cap_n = pp_cap ind_trail_rewind(parser, pp_trail)
+  end
+end
+if not parser.success and not parser.throw_label then
+  parser.success = true
+  do -- sequence with 3 patterns
+  local pp_pos, pp_cap, pp_trail = parser.pos, parser.cap_n, parser.trail_n
+  rules["AnnotationDiscard"](parser)
+if parser.success then
+do -- zero or more repetitions
+  while true do
+    rules["EmptyLineNA"](parser)
+    if not parser.success then
+      break
+    end
+  end
+  -- Only recover from ordinary failure, not labeled failure from T()
+  if not parser.throw_label then
+    parser.success = true
+  end
+end
+end
+if parser.success then
+rules["TableBlockRest"](parser)
+end
+  if not parser.success then
+    parser.pos = pp_pos parser.cap_n = pp_cap ind_trail_rewind(parser, pp_trail)
+  end
+end
+end
 end
 
   parser.depth = depth - 1
@@ -12846,8 +13659,8 @@ rules["White"] = function(parser)
   local start = parser.pos
     -- Position-pure rule: a single-slot memo short-circuits the repeated
   -- calls that backtracking alternatives make at the same position
-  if parser.memo_pos[10] == start + 1 then
-    local memo_end = parser.memo_end[10]
+  if parser.memo_pos[14] == start + 1 then
+    local memo_end = parser.memo_end[14]
     if memo_end == -1 then
       parser.success = false
       return false
@@ -12883,8 +13696,8 @@ end
     parser.success = true
   end
 end
-  parser.memo_pos[10] = start + 1
-  parser.memo_end[10] = parser.success and parser.pos or -1
+  parser.memo_pos[14] = start + 1
+  parser.memo_end[14] = parser.success and parser.pos or -1
 
   parser.depth = depth - 1
   return parser.success

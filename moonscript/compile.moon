@@ -86,10 +86,15 @@ class Lines
           insert buffer, indent if indent
           insert buffer, l
 
-          -- insert breaks between ambiguous statements
-          if "string" == type @[i + 1]
-            if l\sub(-1)!=',' and l\sub(-3)!='end' and @[i + 1]\sub(1,1) == "("
-              insert buffer, ";"
+          -- insert breaks between ambiguous statements. annotation comments
+          -- can't end a statement and are skipped when looking ahead
+          unless l\sub(1, 3) == "---"
+            k = i + 1
+            while "string" == type(@[k]) and @[k]\sub(1, 3) == "---"
+              k += 1
+            if "string" == type @[k]
+              if l\sub(-1)!=',' and l\sub(-3)!='end' and @[k]\sub(1,1) == "("
+                insert buffer, ";"
 
           insert buffer, "\n"
         when Lines
@@ -119,21 +124,35 @@ class Lines
 
           -- same ambiguous statement check as flatten, between adjacent
           -- strings of the same buffer. chunks meeting across nesting levels
-          -- never need a break: block openers can't end an expression
-          prev = @[i - 1]
+          -- never need a break: block openers can't end an expression.
+          -- annotation comments can't end a statement, look past them
+          k = i - 1
+          while "string" == type(@[k]) and @[k]\sub(1, 3) == "---"
+            k -= 1
+          prev = @[k]
           ambiguous = l\sub(1,1) == "(" and "string" == type(prev) and
             prev\sub(-1) != ',' and prev\sub(-3) != 'end'
 
           if target and target > state.line
-            insert buffer, ";" if ambiguous
+            -- a ; appended to a comment line would be commented out, put it
+            -- at the start of the new line instead
+            insert buffer, ";" if ambiguous and not state.last_comment
             insert buffer, ("\n")\rep target - state.line
             insert buffer, indent if indent
+            insert buffer, ";" if ambiguous and state.last_comment
             state.line = target
           elseif state.started
-            insert buffer, ambiguous and "; " or " "
+            if state.last_comment
+              -- nothing can join a line ending in a comment
+              insert buffer, "\n"
+              insert buffer, indent if indent
+              state.line += 1
+            else
+              insert buffer, ambiguous and "; " or " "
 
           insert buffer, l
           state.started = true
+          state.last_comment = l\sub(1, 3) == "---"
 
           if target
             state.posmap[state.line] or= posmap[i]
