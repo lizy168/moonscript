@@ -1,27 +1,16 @@
-name: "windows_exe"
-
-on: [push]
-
-jobs:
-  build:
-    runs-on: windows-latest
-
-    steps:
-    - uses: actions/checkout@master
-
-
-    - uses: msys2/setup-msys2@v2
-      with:
-        install: gcc make curl
-
-    - run: gcc -v
-
-    - name: Setup Lua
-    - run: |
-        curl -O https://www.lua.org/ftp/lua-5.1.5.tar.gz
-        tar -xZf lua-5.1.5.tar.gz
-
-    - name: list files
-      run: Get-ChildItem
-
-
+--- a/.github/workflows/windows_exe.yml
++++ b/.github/workflows/windows_exe.yml
+@@ -17,11 +17,9 @@
+     - run: gcc -v
+ 
+     - name: Setup Lua
+-    - run: |
++      run: |
+         curl -O https://www.lua.org/ftp/lua-5.1.5.tar.gz
+         tar -xZf lua-5.1.5.tar.gz
+ 
+     - name: list files
+-      run: Get-ChildItem
+-
+-
++      run: Get-ChildItem
